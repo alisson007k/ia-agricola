@@ -1,197 +1,436 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA - Manutenção Preditiva Avançada</title>
-    <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 580px; width: 100%; text-align: center; }
-        h1 { color: #d32f2f; font-size: 24px; margin-bottom: 5px; }
-        p { color: #666; font-size: 14px; margin-top: 0; }
-        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; }
-        input[type="range"] { width: 100%; accent-color: #2e7d32; }
-        .val { float: right; color: #2e7d32; font-weight: bold; }
-        
-        .btn-verde { background-color: #2e7d32; color: white; border: none; padding: 15px; width: 100%; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: block; margin-top: 10px; }
-        .btn-verde:hover { background-color: #1b5e20; }
-        
-        #painel-resposta { display: none; margin-top: 25px; text-align: left; }
-        #caixa-status { padding: 15px; border-radius: 6px; font-weight: bold; margin-bottom: 10px; font-size: 15px; text-align: center; }
-        #caixa-dica { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #2e7d32; border-radius: 4px; font-size: 13px; line-height: 1.5; color: #444; margin-bottom: 10px; }
-        #caixa-eco { background-color: #fff3e0; border: 1px dashed #e65100; padding: 12px; border-radius: 6px; font-size: 13px; color: #e65100; margin-bottom: 10px; font-weight: bold; }
-        #caixa-certeza { font-size: 11px; color: #777; text-align: right; font-style: italic; }
-        
-        .cor-normal { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
-        .cor-alerta { background-color: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
-        .cor-critico { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
 
-        .historico-box { margin-top: 35px; text-align: left; }
-        .historico-box h3 { color: #d32f2f; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
-        .table-wrap { max-height: 160px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
-        th, td { padding: 8px; border-bottom: 1px solid #eee; }
-        th { background-color: #f7f9f8; font-weight: bold; color: #555; position: sticky; top: 0; }
+    <title>Manutenção Preditiva - IA Agrícola</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #166534;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.4);
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        header p {
+            margin-top: 8px;
+            color: #d1fae5;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #86efac;
+        }
+
+        .sensor {
+            background: #334155;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .sensor-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #111827;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: #22c55e;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        #resultado {
+            text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            background: #0f172a;
+        }
+
+        #icone {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        #veredicto {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #explicacao {
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .risco {
+            margin-top: 20px;
+            background: #334155;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .barra {
+            height: 15px;
+            width: 0%;
+            background: #22c55e;
+            transition: 1s;
+        }
+
+        .status-normal {
+            border: 2px solid #22c55e;
+        }
+
+        .status-alerta {
+            border: 2px solid #facc15;
+        }
+
+        .status-perigo {
+            border: 2px solid #ef4444;
+        }
+
+        .info {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
     </style>
 </head>
+
 <body>
 
+<header>
+    <h1>🚜 Manutenção Preditiva</h1>
+    <p>Inteligência Artificial para veículos agrícolas</p>
+</header>
+
 <div class="container">
-    <h1>🚜 IA Multi-Diagnóstico de Tratores</h1>
-    <p>Projeto de Mostra Científica - Jovem Ciência</p>
-    <hr>
 
-    <div class="input-group">
-        <label>Nível de Vibração Geral: <span id="txt-vibra" class="val">Baixa (Normal)</span></label>
-        <input type="range" id="slide-vibra" min="0" max="2" value="0" oninput="mudarValores()">
-    </div>
+    <div class="card">
+        <h2>📡 Dados do veículo</h2>
 
-    <div class="input-group">
-        <label>Fumaça do Escapamento: <span id="txt-fumaca" class="val">Invisível (Normal)</span></label>
-        <input type="range" id="slide-fumaca" min="0" max="2" value="0" oninput="mudarValores()">
-    </div>
+        <div class="sensor">
+            <div class="sensor-title">
+                <span>📳 Vibração do Motor / Chassi</span>
+            </div>
 
-    <div class="input-group">
-        <label>Temperatura do Sistema: <span id="txt-temp" class="val">80°C (Ideal)</span></label>
-        <input type="range" id="slide-temp" min="40" max="120" value="80" oninput="mudarValores()">
-    </div>
-
-    <button type="button" class="btn-verde" onclick="preverQuebraIA()">📊 Rodar Diagnóstico Preditivo</button>
-
-    <div id="painel-resposta">
-        <div id="caixa-status"></div>
-        <div id="caixa-dica"></div>
-        <div id="caixa-eco"></div>
-        <div id="caixa-certeza"></div>
-    </div>
-
-    <div class="historico-box">
-        <h3>📋 Histórico de Componentes Analisados</h3>
-        <div class="table-wrap">
-            <table id="tabela-dados">
-                <thead>
-                    <tr>
-                        <th>Vibração</th>
-                        <th>Fumaça</th>
-                        <th>Temp.</th>
-                        <th>Previsão da IA</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <select id="vibracao">
+                <option value="0">Normal</option>
+                <option value="1">Tremendo um pouco</option>
+                <option value="2">Tremendo muito</option>
+            </select>
         </div>
+
+        <div class="sensor">
+            <div class="sensor-title">
+                <span>💨 Cor da Fumaça</span>
+            </div>
+
+            <select id="fumaca">
+                <option value="0">Normal / Invisível</option>
+                <option value="1">Fumaça branca</option>
+                <option value="2">Fumaça preta</option>
+            </select>
+        </div>
+
+        <div class="sensor">
+            <div class="sensor-title">
+                <span>🌡️ Temperatura do Motor</span>
+            </div>
+
+            <select id="temperatura">
+                <option value="0">Motor frio</option>
+                <option value="1">Temperatura ideal</option>
+                <option value="2">Superaquecendo</option>
+            </select>
+        </div>
+
+        <button onclick="analisarVeiculo()">
+            🤖 ANALISAR COM IA
+        </button>
     </div>
+
+
+    <div class="card">
+        <h2>🧠 Resultado da IA</h2>
+
+        <div id="resultado" class="status-normal">
+
+            <div id="icone">🤖</div>
+
+            <div id="veredicto">
+                Aguardando análise
+            </div>
+
+            <p id="explicacao">
+                Informe os sinais do veículo e clique em
+                "Analisar com IA".
+            </p>
+
+            <div class="risco">
+                <div id="barraRisco" class="barra"></div>
+            </div>
+
+            <p id="porcentagem" style="margin-top:10px;">
+                Risco: 0%
+            </p>
+
+        </div>
+
+        <p class="info">
+            ⚠️ Esta versão é um protótipo. Os resultados são baseados
+            em regras simuladas e não devem ser usados para determinar
+            a segurança ou manutenção real de um veículo.
+        </p>
+    </div>
+
 </div>
 
+<footer>
+    🚜 Sistema de Manutenção Preditiva • Projeto com IA
+</footer>
+
+
 <script>
-    const pesosMecanicos = {
-        normal:      { v: -3.0, f: -3.0, t: -2.0, b: 2.5  },
-        filtros:     { v: 0.2,  f: 4.0,  t: 0.8,  b: -1.0 },
-        pneus:       { v: 3.5,  f: -2.0, t: -1.0, b: -0.5 },
-        correias:    { v: 2.5,  f: 1.5,  t: 3.0,  b: -1.5 },
-        pinos_bucha: { v: 4.5,  f: -3.0, t: -2.0, b: -1.0 },
-        discos:      { v: 1.5,  f: 2.0,  t: 3.5,  b: -1.0 }
-    };
 
-    const orientacoesMecanicas = {
-        normal: "<strong>Status:</strong> Veículo saudável. Todos os sistemas mecânicos operam nos parâmetros ideais.",
-        filtros: "<strong>Recomendação Técnica:</strong> Efetuar a substituição dos Filtros (Ar, Óleo e Combustível). A queima incompleta gera fumaça preta e força as bombas injetoras.",
-        pneus: "<strong>Recomendação Técnica:</strong> Revisar Pneus e Calibragem. Trepidações contínuas em baixa temperatura indicam desgaste irregular da banda de rodagem ou desalinhamento.",
-        correias: "<strong>Recomendação Técnica:</strong> Troca de Correias e Mangueiras. O superaquecimento associado à fumaça clara indica perda de líquido de arrefecimento por mangueiras rompidas ou patinação da correia da bomba d'água.",
-        pinos_bucha: "<strong>Recomendação Técnica:</strong> Manutenção de Pinos e Buchas de Articulação. Vibração severa na estrutura móvel sem fumaça e sem calor indica folga crítica nos eixos de articulação mecânica.",
-        discos: "<strong>Recomendação Técnica:</strong> Substituir Discos de Embreagem e Freio. Patinação em alta temperatura sob carga de trabalho gera superaquecimento por atrito direto nos discos de fricção."
-    };
+function analisarVeiculo() {
 
-    function mudarValores() {
-        let v = parseInt(document.getElementById('slide-vibra').value);
-        let f = parseInt(document.getElementById('slide-fumaca').value);
-        let t = parseInt(document.getElementById('slide-temp').value);
+    // Pegando os valores dos sensores
+    const vibracao = Number(
+        document.getElementById("vibracao").value
+    );
 
-        const textoVibra = ["Baixa (Normal)", "Moderada (Alerta)", "Alta (Severa)"];
-        const textoFumaca = ["Invisível (Normal)", "Branca / Vapor", "Preta (Combustão Má)"];
+    const fumaca = Number(
+        document.getElementById("fumaca").value
+    );
 
-        document.getElementById('txt-vibra').innerText = textoVibra[v];
-        document.getElementById('txt-fumaca').innerText = textoFumaca[f];
-        document.getElementById('txt-temp').innerText = t + "°C";
+    const temperatura = Number(
+        document.getElementById("temperatura").value
+    );
+
+
+    let resultado = "";
+    let explicacao = "";
+    let icone = "";
+    let risco = 0;
+
+
+    /*
+        SIMULAÇÃO DA REDE NEURAL
+
+        Cada combinação dos sinais gera uma previsão.
+
+        No futuro, esses valores podem ser substituídos
+        por uma rede neural realmente treinada com dados
+        de tratores e máquinas agrícolas.
+    */
+
+
+    // 🔥 Superaquecimento
+    if (temperatura === 2) {
+
+        resultado = "Radiador Furado / Falta de Água";
+        explicacao =
+            "A temperatura do motor está acima do normal. " +
+            "A IA identificou sinais compatíveis com problema " +
+            "no sistema de arrefecimento.";
+
+        icone = "🌡️";
+        risco = 90;
     }
 
-    function preverQuebraIA() {
-        let valV = parseInt(document.getElementById('slide-vibra').value);
-        let valF = parseInt(document.getElementById('slide-fumaca').value);
-        let valT = parseInt(document.getElementById('slide-temp').value);
+    // 💨 Fumaça preta + vibração
+    else if (fumaca === 2 && vibracao >= 1) {
 
-        let nV = valV / 2;
-        let nF = valF / 2;
-        let nT = (valT - 40) / 80;
+        resultado = "Filtro de Ar Entupido";
+        explicacao =
+            "A combinação de fumaça preta e vibração " +
+            "pode indicar falta de ar suficiente para a combustão.";
 
-        let disparos = {};
-        let somaTotal = 0;
+        icone = "💨";
+        risco = 82;
+    }
 
-        for (let peça in pesosMecanicos) {
-            let p = pesosMecanicos[peça];
-            let calculo = (nV * p.v) + (nF * p.f) + (nT * p.t) + p.b;
-            disparos[peça] = Math.max(0.01, calculo + 5);
-            somaTotal += disparos[peça];
-        }
+    // 📳 Vibração alta
+    else if (vibracao === 2) {
 
-        let maxScore = -Infinity;
-        let pecaVencedora = "";
-        for (let peça in disparos) {
-            if (disparos[peça] > maxScore) {
-                maxScore = disparos[peça];
-                pecaVencedora = peça;
-            }
-        }
+        resultado = "Correia do Motor Desgastada";
+        explicacao =
+            "A vibração elevada pode indicar desgaste " +
+            "ou problema em componentes mecânicos do motor.";
 
-        let certeza = Math.round((disparos[pecaVencedora] / somaTotal) * 100);
-        
-        let painel = document.getElementById('painel-resposta');
-        let cStatus = document.getElementById('caixa-status');
-        let cDica = document.getElementById('caixa-dica');
-        let cEco = document.getElementById('caixa-eco');
-        let cCerteza = document.getElementById('caixa-certeza');
+        icone = "⚙️";
+        risco = 78;
+    }
 
-        painel.style.display = "block";
-        cStatus.className = "";
+    // 💨 Fumaça branca
+    else if (fumaca === 1) {
 
-        let nomeExibicao = "";
-        let custoEvitado = 0;
+        resultado = "Radiador Furado / Falta de Água";
+        explicacao =
+            "A presença de fumaça branca pode indicar " +
+            "uma anomalia que precisa ser investigada.";
 
-        if (pecaVencedora === "normal") {
-            cStatus.innerHTML = "✅ Operação Segura e Normal";
-            cStatus.classList.add("cor-normal");
-            nomeExibicao = "Normal";
-            custoEvitado = 0;
-        } else if (pecaVencedora === "filtros") {
-            cStatus.innerHTML = "⚠️ Manutenção: Kit de Filtros";
-            cStatus.classList.add("cor-alerta");
-            nomeExibicao = "Manut. Filtros";
-            custoEvitado = 600;
-        } else if (pecaVencedora === "pneus") {
-            cStatus.innerHTML = "⚠️ Manutenção: Pneus e Alinhamento";
-            cStatus.classList.add("cor-alerta");
-            nomeExibicao = "Revisão Pneus";
-            custoEvitado = 4000;
-        } else if (pecaVencedora === "correias") {
-            cStatus.innerHTML = "🚨 Risco: Correias e Mangueiras";
-            cStatus.classList.add("cor-critico");
-            nomeExibicao = "Correias/Mangueiras";
-            custoEvitado = 2500;
-        } else if (pecaVencedora === "pinos_bucha") {
-            cStatus.innerHTML = "⚠️ Manutenção: Pinos e Buchas";
-            cStatus.classList.add("cor-alerta");
-            nomeExibicao = "Pinos e Buchas";
-            custoEvitado = 1800;
-        } else {
-            cStatus.innerHTML = "🚨 Risco: Discos de Freio / Embreagem";
-            cStatus.classList.add("cor-critico");
-            nomeExibicao = "Discos Embreagem/Freio";
-            custoEvitado = 6500;
-        }
+        icone = "💧";
+        risco = 70;
+    }
 
-        cDica.innerHTML = orientacoesMecanicas[pecaVencedora];
-        
-        if (custoEvitado > 0) {
-            cEco.style.display = "block";
+    // 📳 Vibração moderada
+    else if (vibracao === 1) {
+
+        resultado = "Correia do Motor Desgastada";
+        explicacao =
+            "Foi detectada uma vibração acima do padrão normal. " +
+            "Recomenda-se verificar componentes mecânicos.";
+
+        icone = "🔧";
+        risco = 55;
+    }
+
+    // ✅ Tudo normal
+    else {
+
+        resultado = "Funcionamento Perfeito";
+        explicacao =
+            "Os três sinais estão dentro dos parâmetros " +
+            "considerados normais pelo modelo.";
+
+        icone = "✅";
+        risco = 5;
+    }
+
+
+    // Atualizando a tela
+
+    document.getElementById("veredicto").innerText =
+        resultado;
+
+    document.getElementById("explicacao").innerText =
+        explicacao;
+
+    document.getElementById("icone").innerText =
+        icone;
+
+    document.getElementById("porcentagem").innerText =
+        "Risco estimado: " + risco + "%";
+
+
+    const barra =
+        document.getElementById("barraRisco");
+
+    barra.style.width = risco + "%";
+
+
+    // Mudando a cor da barra
+
+    if (risco < 30) {
+
+        barra.style.background = "#22c55e";
+
+    } else if (risco < 70) {
+
+        barra.style.background = "#facc15";
+
+    } else {
+
+        barra.style.background = "#ef4444";
+    }
+
+
+    // Mudando a borda do resultado
+
+    const caixa =
+        document.getElementById("resultado");
+
+    caixa.classList.remove(
+        "status-normal",
+        "status-alerta",
+        "status-perigo"
+    );
+
+
+    if (risco < 30) {
+
+        caixa.classList.add("status-normal");
+
+    } else if (risco < 70) {
+
+        caixa.classList.add("status-alerta");
+
+    } else {
+
+        caixa.classList.add("status-perigo");
+    }
+}
+
+</script>
+
+</body>
+</html>
+```
