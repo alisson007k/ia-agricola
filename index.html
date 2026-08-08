@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA na Agricultura - Jovem Ciência</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 550px; width: 100%; text-align: center; }
+        h1 { color: #2e7d32; font-size: 24px; margin-bottom: 5px; }
+        p { color: #666; font-size: 14px; margin-top: 0; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; }
+        input[type="range"] { width: 100%; accent-color: #2e7d32; }
+        .val { float: right; color: #2e7d32; font-weight: bold; }
+        
+        /* BOTÃO PRINCIPAL REESTRUTURADO */
+        .btn-analisar-ia { background-color: #1565c0; color: white; border: none; padding: 15px; width: 100%; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: block; margin-top: 10px; }
+        .btn-analisar-ia:hover { background-color: #0d47a1; }
+        
+        #resultado-container { display: none; margin-top: 25px; text-align: left; }
+        #resultado { padding: 15px; border-radius: 6px; font-weight: bold; margin-bottom: 10px; font-size: 15px; text-align: center; }
+        #recomendacao { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #1565c0; border-radius: 4px; font-size: 13px; line-height: 1.5; color: #444; margin-bottom: 10px; }
+        #painel-sustentavel { background-color: #e8f5e9; border: 1px dashed #2e7d32; padding: 12px; border-radius: 6px; font-size: 13px; color: #1b5e20; margin-bottom: 10px; font-weight: bold; }
+        #confianca-ia { font-size: 11px; color: #777; text-align: right; margin-top: 5px; font-style: italic; }
+        
+        .sucesso-alto { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+        .sucesso-medio { background-color: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+        .risco-seca { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+        .risco-encharcado { background-color: #e1f5fe; color: #0277bd; border: 1px solid #81d4fa; }
+
+        .historico-section { margin-top: 35px; text-align: left; }
+        .historico-section h3 { color: #2e7d32; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
+        .table-wrapper { max-height: 150px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
+        th, td { padding: 8px; border-bottom: 1px solid #eee; }
+        th { background-color: #f7f9f8; font-weight: bold; color: #555; position: sticky; top: 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌱 Previsão Agrícola Sustentável com IA</h1>
+    <p>Projeto de Mostra Científica - Jovem Ciência</p>
+    <div id="status-ia">✅ Rede Neural Perceptron Carregada com Sucesso!</div>
+    <hr>
+
+    <div class="input-group">
+        <label>Umidade do Solo: <span id="val_umidade" class="val">50%</span></label>
+        <input type="range" id="umidade" min="0" max="100" value="50" oninput="atualizarValores()">
+    </div>
+
+    <div class="input-group">
+        <label>Temperatura Média: <span id="val_temp" class="val">25°C</span></label>
+        <input type="range" id="temp" min="10" max="50" value="25" oninput="atualizarValores()">
+    </div>
+
+    <div class="input-group">
+        <label>Dias Sem Chuva: <span id="val_chuva" class="val">3 dias</span></label>
+        <input type="range" id="chuva" min="0" max="30" value="3" oninput="atualizarValores()">
+    </div>
+
+    <button type="button" class="btn-analisar-ia" onclick="preverSaude()">📊 Rodar Algoritmo de Previsão</button>
+
+    <div id="resultado-container">
+        <div id="resultado"></div>
+        <div id="recomendacao"></div>
+        <div id="painel-sustentavel"></div>
+        <div id="confianca-ia"></div>
+    </div>
+
+    <div class="historico-section">
+        <h3>📋 Registro Histórico de Monitoramento</h3>
+        <div class="table-wrapper">
+            <table id="tabela-historico">
+                <thead>
+                    <tr>
+                        <th>Solo</th>
+                        <th>Temp.</th>
+                        <th>Estiagem</th>
+                        <th>Veredicto IA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const PesosIA = {
+        sucesso_alto: { umidade: 2.5, temp: -1.2, chuva: -2.0, bias: -0.5 },
+        risco_seca: { umidade: -3.0, temp: 2.5, chuva: 3.0, bias: -1.0 },
+        encharcado: { umidade: 4.0, temp: -2.0, chuva: -4.0, bias: -2.0 },
+        sucesso_medio: { umidade: 0.5, temp: 0.5, chuva: 0.2, bias: 0.0 }
+    };
+
+    const RecomendacoesMedicas = {
+        sucesso_alto: "<strong>Orientação Técnica:</strong> Condições ideais encontradas! Mantenha a rotina atual de manejo. Recomenda-se apenas o monitoramento preventivo semanal contra pragas oportunistas.",
+        risco_seca: "<strong>Plano de Contingência:</strong> Risco severo de estresse hídrico! Ative o sistema de irrigação de emergência imediatamente. Considere cobrir o solo com palhada seca para reduzir a evapotranspiração.",
+        encharcado: "<strong>Plano de Contingência:</strong> Saturação hídrica detectada! Interrompa qualquer sistema de irrigação ativo. Abra canais de drenagem na lavoura para evitar o apodrecimento das raízes e a proliferação de fungos.",
+        sucesso_medio: "<strong>Orientação Técnica:</strong> Estado de atenção. O clima ou solo apresenta variações instáveis. Aumente a frequência de checagem do solo e planeje uma irrigação leve nas próximas 24 horas se a temperatura subir."
+    };
+
+    function atualizarValores() {
+        document.getElementById('val_umidade').innerText = document.getElementById('umidade').value + '%';
+        document.getElementById('val_temp').innerText = document.getElementById('temp').value + '°C';
+        document.getElementById('val_chuva').innerText = document.getElementById('chuva').value + ' dias';
+    }
+
+    function preverSaude() {
+        let umidadeNum = parseInt(document.getElementById('umidade').value);
+        let tempNum = parseInt(document.getElementById('temp').value);
+        let chuvaNum = parseInt(document.getElementById('chuva').value);
+
+        let u = umidadeNum / 100;
+        let t = (tempNum - 10) / 40;
+        let c = chuvaNum / 30;
+        
+        let container = document.getElementById('resultado-container');
+        let divResultado = document.getElementById('resultado');
+        let divRecomendacao = document.getElementById('recomendacao');
+        let divSustentavel = document.getElementById('painel-sustentavel');
+        let divConfianca = document.getElementById('confianca-ia');
+
+        container.style.display = "block";
+        divResultado.className = ""; 
+
+        let scores = {};
+        let somaAtivacoes = 0;
+        for (let classe in PesosIA) {
+            let p = PesosIA[classe];
+            let ativacao = (u * p.umidade) + (t * p.temp) + (c * p.chuva) + p.bias;
+            scores[classe] = Math.max(0.01, ativacao + 5); 
+            somaAtivacoes += scores[classe];
+        }
+        
+        let maiorScore = -Infinity;
+        let veredicto = "";
+        for (let classe in scores) {
+            if (scores[classe] > maiorScore) {
+                maiorScore = scores[classe];
+                veredicto = classe;
+            }
+        }
+
+        let porcentagemConfianca = Math.round((scores[veredicto] / somaAtivacoes) * 100);
+        let textoFormatadoHistorico = "";
+        let aguaSalva = 0;
+
+        if (veredicto === "sucesso_alto") {
+            divResultado.innerHTML = `✅ Sucesso Alto`;
+            divResultado.classList.add("sucesso-alto");
+            divRecomendacao.style.borderLeftColor = "#2e7d32";
+            textoFormatadoHistorico = "Sucesso Alto";
+            aguaSalva = 250;
+        } else if (veredicto === "risco_seca") {
+            divResultado.innerHTML = `🚨 Risco de Seca`;
+            divResultado.classList.add("risco-seca");
+            divRecomendacao.style.borderLeftColor = "#c62828";
+            textoFormatadoHistorico = "Risco Seca";
+            aguaSalva = 100;
+        } else if (veredicto === "encharcado") {
+            divResultado.innerHTML = `🌊 Solo Encharcado`;
+            divResultado.classList.add("risco-encharcado");
+            divRecomendacao.style.borderLeftColor = "#0277bd";
+            textoFormatadoHistorico = "Encharcado";
+            aguaSalva = 800;
+        } else {
+            divResultado.innerHTML = `⚠️ Sucesso Médio`;
+            divResultado.classList.add("sucesso-medio");
+            divRecomendacao.style.borderLeftColor = "#f57f17";
+            textoFormatadoHistorico = "Sucesso Médio";
+            aguaSalva = 150;
+        }
+
+        divRecomendacao.innerHTML = RecomendacoesMedicas[veredicto];
+        divSustentavel.innerHTML = `🌳 Impacto Ecológico: Seguir este diagnóstico evita o desperdício de aproximadamente ${aguaSalva} litros de água por hectare/dia neste setor.`;
+        divConfianca.innerText = `Certeza do modelo matemático da IA: ${porcentagemConfianca}%`;
+
+        salvarNoHistorico(umidadeNum, tempNum, chuvaNum, textoFormatadoHistorico);
+    }
+
+    function salvarNoHistorico(u, t, c, res) {
+        let tabela = document.getElementById("tabela-historico").getElementsByTagName('tbody');
+        let novaLinha = tabela.insertRow(0);
+        
