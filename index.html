@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>IA Agrícola - Diagnóstico Preditivo</title>
+<title>IA Agrícola - Jovem Ciência</title>
 
 <style>
 
@@ -16,23 +16,25 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #f7f9f8;
+    background: #f4f7f4;
     color: #333;
 }
 
 .container {
     width: 95%;
-    max-width: 650px;
+    max-width: 700px;
     margin: 30px auto;
     background: white;
     padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
 }
 
+/* CABEÇALHO */
+
 h1 {
-    color: #2e7d32;
     text-align: center;
+    color: #2e7d32;
     margin-bottom: 5px;
 }
 
@@ -40,15 +42,24 @@ h1 {
     text-align: center;
     color: #777;
     font-size: 13px;
+    line-height: 1.6;
     margin-bottom: 25px;
-    line-height: 1.5;
 }
 
-/* ENTRADAS */
+.projeto {
+    background: #e8f5e9;
+    border-left: 4px solid #2e7d32;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* SENSORES */
 
 .input-group {
     margin-bottom: 20px;
-    text-align: left;
 }
 
 .input-group label {
@@ -56,7 +67,6 @@ h1 {
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 8px;
-    color: #444;
 }
 
 .val {
@@ -68,7 +78,6 @@ h1 {
 input[type="range"] {
     width: 100%;
     accent-color: #2e7d32;
-    cursor: pointer;
 }
 
 /* BOTÃO */
@@ -84,76 +93,72 @@ input[type="range"] {
     cursor: pointer;
     font-weight: bold;
     transition: background 0.2s;
-    display: block;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .btn-verde:hover {
     background-color: #1b5e20;
 }
 
-/* PAINEL */
+/* RESULTADO */
 
 #painel-resposta {
     display: none;
     margin-top: 25px;
-    text-align: left;
 }
 
 #caixa-status {
     padding: 15px;
     border-radius: 6px;
     font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 15px;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 #caixa-dica {
-    background-color: #f9f9f9;
+    background: #f9f9f9;
     padding: 15px;
     border-left: 4px solid #2e7d32;
     border-radius: 4px;
     font-size: 13px;
-    line-height: 1.5;
-    color: #444;
+    line-height: 1.6;
     margin-bottom: 10px;
 }
 
 #caixa-eco {
-    background-color: #e8f5e9;
+    background: #e8f5e9;
     border: 1px dashed #2e7d32;
     padding: 12px;
     border-radius: 6px;
-    font-size: 13px;
     color: #1b5e20;
-    margin-bottom: 10px;
+    font-size: 13px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 #caixa-certeza {
-    font-size: 11px;
     color: #777;
+    font-size: 11px;
     text-align: right;
     font-style: italic;
 }
 
 /* CORES */
 
-.cor-normal {
-    background-color: #e8f5e9;
+.normal {
+    background: #e8f5e9;
     color: #2e7d32;
     border: 1px solid #a5d6a7;
 }
 
-.cor-atencao {
-    background-color: #fff8e1;
+.atencao {
+    background: #fff8e1;
     color: #f57f17;
     border: 1px solid #ffe082;
 }
 
-.cor-alto {
-    background-color: #ffebee;
+.perigo {
+    background: #ffebee;
     color: #c62828;
     border: 1px solid #ef9a9a;
 }
@@ -162,32 +167,31 @@ input[type="range"] {
 
 .abas {
     display: flex;
-    gap: 5px;
     margin-top: 20px;
+    gap: 5px;
 }
 
 .aba-btn {
     flex: 1;
+    padding: 13px 5px;
     border: none;
-    padding: 12px 8px;
-    background-color: #eeeeee;
+    background: #eeeeee;
     color: #555;
     cursor: pointer;
     font-weight: bold;
-    font-size: 13px;
     border-radius: 6px 6px 0 0;
 }
 
 .aba-btn.active {
-    background-color: #2e7d32;
+    background: #2e7d32;
     color: white;
 }
 
 .aba-conteudo {
     display: none;
+    padding: 18px;
     border: 1px solid #eee;
     border-top: none;
-    padding: 15px;
     border-radius: 0 0 6px 6px;
 }
 
@@ -195,28 +199,21 @@ input[type="range"] {
     display: block;
 }
 
-/* DIAGNÓSTICO */
+/* PEÇA */
 
-.diagnostico {
+.peca {
     background: #fafafa;
-    border-left: 4px solid #c62828;
+    border-left: 5px solid #c62828;
     padding: 15px;
     border-radius: 5px;
-    margin-bottom: 12px;
 }
 
-.diagnostico h3 {
-    margin: 0 0 8px 0;
+.peca h3 {
+    margin-top: 0;
     color: #333;
 }
 
-.diagnostico p {
-    margin: 5px 0;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.confianca {
+.percentual {
     display: inline-block;
     background: #e8f5e9;
     color: #2e7d32;
@@ -224,15 +221,14 @@ input[type="range"] {
     border-radius: 15px;
     font-size: 12px;
     font-weight: bold;
-    margin-top: 7px;
 }
 
-/* AÇÕES */
+/* AÇÃO */
 
 .acao {
     background: #fafafa;
     border-left: 4px solid #2e7d32;
-    padding: 13px;
+    padding: 14px;
     margin-bottom: 10px;
     border-radius: 5px;
 }
@@ -244,29 +240,24 @@ input[type="range"] {
 .acao p {
     font-size: 13px;
     line-height: 1.5;
-    margin-bottom: 0;
 }
 
 /* HISTÓRICO */
 
 .historico-box {
-    margin-top: 35px;
-    text-align: left;
+    margin-top: 30px;
 }
 
 .historico-box h3 {
     color: #2e7d32;
     font-size: 16px;
     border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
+    padding-bottom: 6px;
 }
 
 .table-wrap {
     max-height: 180px;
     overflow-y: auto;
-    border: 1px solid #eee;
-    border-radius: 4px;
 }
 
 table {
@@ -282,19 +273,24 @@ th, td {
 }
 
 th {
-    background-color: #f7f9f8;
-    font-weight: bold;
-    color: #555;
+    background: #f7f9f8;
     position: sticky;
     top: 0;
 }
 
 .offline {
     text-align: center;
-    margin-top: 20px;
     color: #2e7d32;
     font-size: 12px;
     font-weight: bold;
+    margin-top: 20px;
+}
+
+.rodape {
+    text-align: center;
+    color: #888;
+    font-size: 11px;
+    margin-top: 15px;
 }
 
 </style>
@@ -304,89 +300,109 @@ th {
 
 <div class="container">
 
-<h1>🚜 IA Agrícola</h1>
+<h1>🌱 IA Agrícola</h1>
 
 <div class="subtitulo">
-    Sistema de manutenção preditiva para tratores.
-    <br>
-    A IA analisa vibração, temperatura e fumaça para deduzir
-    qual componente apresenta maior probabilidade de falha.
+    Sistema de manutenção preditiva para tratores
+</div>
+
+<div class="projeto">
+
+<strong>💡 Projeto Jovem Ciência</strong><br>
+
+A proposta utiliza Inteligência Artificial para analisar
+vibração, temperatura e fumaça do trator e estimar qual
+componente apresenta maior probabilidade de desgaste ou falha.
+
 </div>
 
 
-<!-- SENSOR DE VIBRAÇÃO -->
+<!-- ==========================
+     SENSORES
+========================== -->
 
 <div class="input-group">
 
 <label>
-    Vibração:
-    <span id="txt-vibracao" class="val">30%</span>
+📳 Vibração do Trator
+
+<span id="txt-vibracao" class="val">
+30%
+</span>
+
 </label>
 
 <input
-    type="range"
-    id="slide-vibracao"
-    min="0"
-    max="100"
-    value="30"
-    oninput="mudarValores()"
+type="range"
+id="slide-vibracao"
+min="0"
+max="100"
+value="30"
+oninput="mudarValores()"
 >
 
 </div>
 
 
-<!-- TEMPERATURA -->
-
 <div class="input-group">
 
 <label>
-    Temperatura do Motor:
-    <span id="txt-temp" class="val">75°C</span>
+🌡️ Temperatura do Motor
+
+<span id="txt-temp" class="val">
+75°C
+</span>
+
 </label>
 
 <input
-    type="range"
-    id="slide-temp"
-    min="40"
-    max="130"
-    value="75"
-    oninput="mudarValores()"
+type="range"
+id="slide-temp"
+min="40"
+max="130"
+value="75"
+oninput="mudarValores()"
 >
 
 </div>
 
 
-<!-- FUMAÇA -->
-
 <div class="input-group">
 
 <label>
-    Fumaça:
-    <span id="txt-fumaca" class="val">20%</span>
+💨 Fumaça / Emissão
+
+<span id="txt-fumaca" class="val">
+20%
+</span>
+
 </label>
 
 <input
-    type="range"
-    id="slide-fumaca"
-    min="0"
-    max="100"
-    value="20"
-    oninput="mudarValores()"
+type="range"
+id="slide-fumaca"
+min="0"
+max="100"
+value="20"
+oninput="mudarValores()"
 >
 
 </div>
 
 
 <button
-    type="button"
-    class="btn-verde"
-    onclick="calcularPrevisaoIA()"
+class="btn-verde"
+onclick="preverFalha()"
 >
-    📊 Rodar Algoritmo de Previsão
+
+🤖 ANALISAR TRATOR COM IA
+
 </button>
 
 
-<!-- RESULTADO -->
+<!-- ==========================
+     RESULTADO
+========================== -->
 
 <div id="painel-resposta">
 
@@ -404,47 +420,66 @@ th {
 <div class="abas">
 
 <button
-    class="aba-btn active"
-    onclick="abrirAba('trocar', this)"
+class="aba-btn active"
+onclick="abrirAba('trocar',this)"
 >
-    🔧 O Que Trocar
+
+🔧 O Que Trocar
+
 </button>
+
 
 <button
-    class="aba-btn"
-    onclick="abrirAba('fazer', this)"
+class="aba-btn"
+onclick="abrirAba('fazer',this)"
 >
-    🛠️ O Que Fazer
+
+🛠️ O Que Fazer
+
 </button>
 
 </div>
 
 
-<!-- ABA TROCAR -->
+<!-- ==========================
+     O QUE TROCAR
+========================== -->
 
-<div id="trocar" class="aba-conteudo active">
+<div
+id="trocar"
+class="aba-conteudo active"
+>
 
-<div id="diagnostico-peca"></div>
-
-</div>
-
-
-<!-- ABA FAZER -->
-
-<div id="fazer" class="aba-conteudo">
-
-<div id="acoes-manutencao"></div>
-
-</div>
+<div id="resultado-peca"></div>
 
 </div>
 
 
-<!-- HISTÓRICO -->
+<!-- ==========================
+     O QUE FAZER
+========================== -->
+
+<div
+id="fazer"
+class="aba-conteudo"
+>
+
+<div id="resultado-acao"></div>
+
+</div>
+
+</div>
+
+
+<!-- ==========================
+     HISTÓRICO
+========================== -->
 
 <div class="historico-box">
 
-<h3>📋 Registro de Monitoramento</h3>
+<h3>
+📋 Registro de Monitoramento
+</h3>
 
 <div class="table-wrap">
 
@@ -453,15 +488,19 @@ th {
 <thead>
 
 <tr>
+
 <th>Vibração</th>
 <th>Temp.</th>
 <th>Fumaça</th>
-<th>IA</th>
+<th>Previsão</th>
+
 </tr>
 
 </thead>
 
-<tbody id="historico"></tbody>
+<tbody id="historico">
+
+</tbody>
 
 </table>
 
@@ -471,7 +510,16 @@ th {
 
 
 <div class="offline">
-⚡ Diagnóstico local — preparado para funcionar sem internet
+
+⚡ Protótipo preparado para funcionamento offline
+
+</div>
+
+
+<div class="rodape">
+
+Projeto experimental — Jovem Ciência
+
 </div>
 
 </div>
@@ -480,36 +528,39 @@ th {
 <script>
 
 
-/* ==========================================
-   ATUALIZA OS VALORES
-========================================== */
+/* ==================================
+   ATUALIZA OS SENSORES
+================================== */
 
 function mudarValores() {
 
     let vibracao =
-        document.getElementById("slide-vibracao").value;
+        Number(document.getElementById("slide-vibracao").value);
 
     let temperatura =
-        document.getElementById("slide-temp").value;
+        Number(document.getElementById("slide-temp").value);
 
     let fumaca =
-        document.getElementById("slide-fumaca").value;
+        Number(document.getElementById("slide-fumaca").value);
 
 
     document.getElementById("txt-vibracao").innerText =
         vibracao + "%";
 
+
     document.getElementById("txt-temp").innerText =
         temperatura + "°C";
 
+
     document.getElementById("txt-fumaca").innerText =
         fumaca + "%";
+
 }
 
 
-/* ==========================================
+/* ==================================
    ABAS
-========================================== */
+================================== */
 
 function abrirAba(id, botao) {
 
@@ -537,203 +588,245 @@ function abrirAba(id, botao) {
 
 
     botao.classList.add("active");
+
 }
 
 
-/* ==========================================
-   IA DE DIAGNÓSTICO
-========================================== */
+/* ==================================
+   FUNÇÃO PRINCIPAL DA IA
+================================== */
 
-function calcularPrevisaoIA() {
+function preverFalha() {
 
 
-    const vibracao =
+    let vibracao =
         Number(document.getElementById("slide-vibracao").value);
 
-    const temperatura =
+    let temperatura =
         Number(document.getElementById("slide-temp").value);
 
-    const fumaca =
+    let fumaca =
         Number(document.getElementById("slide-fumaca").value);
 
 
     /*
-    ==========================================
-    CÁLCULO DE PROBABILIDADES
+    ==================================
+    PONTUAÇÃO DOS COMPONENTES
 
-    Esta é uma simulação local da lógica da IA.
+    Esta versão é uma BASE DE PROTÓTIPO.
 
-    Em uma versão real, estes valores podem
-    vir da Rede Neural Artificial treinada.
-    ==========================================
+    Futuramente, essas regras podem
+    ser substituídas por uma Rede Neural
+    treinada com dados reais.
+    ==================================
     */
 
-
     let correia = 0;
+
     let filtro = 0;
+
     let arrefecimento = 0;
+
     let motor = 0;
 
+    let pneu = 0;
 
-    /* VIBRAÇÃO */
 
-    if (vibracao > 30)
-        correia += 20;
+    /* CORREIA */
 
-    if (vibracao > 50)
+    if (vibracao >= 40)
         correia += 25;
 
-    if (vibracao > 70)
+    if (vibracao >= 60)
+        correia += 25;
+
+    if (vibracao >= 80)
         correia += 25;
 
 
-    /* TEMPERATURA */
+    /* FILTRO */
 
-    if (temperatura > 80)
-        arrefecimento += 20;
-
-    if (temperatura > 95)
-        arrefecimento += 30;
-
-    if (temperatura > 110)
-        arrefecimento += 30;
-
-
-    /* FUMAÇA */
-
-    if (fumaca > 30)
+    if (fumaca >= 30)
         filtro += 20;
 
-    if (fumaca > 50)
+    if (fumaca >= 50)
+        filtro += 25;
+
+    if (fumaca >= 70)
         filtro += 30;
 
-    if (fumaca > 70)
-        filtro += 30;
+
+    /* ARREFECIMENTO */
+
+    if (temperatura >= 85)
+        arrefecimento += 20;
+
+    if (temperatura >= 100)
+        arrefecimento += 30;
+
+    if (temperatura >= 115)
+        arrefecimento += 30;
 
 
-    /* COMBINAÇÃO DE SINAIS */
+    /* MOTOR */
 
     if (
-        vibracao > 65 &&
-        temperatura > 95
+        temperatura >= 100 &&
+        fumaca >= 50
     ) {
 
-        motor += 70;
+        motor += 60;
 
     }
 
 
     if (
-        temperatura > 100 &&
-        fumaca > 60
+        temperatura >= 110 &&
+        vibracao >= 60
     ) {
 
-        motor += 80;
+        motor += 30;
 
     }
+
+
+    /* PNEU */
+
+    if (vibracao >= 65)
+        pneu += 15;
 
 
     /*
-    ==========================================
-    ENCONTRA A MAIOR PROBABILIDADE
-    ==========================================
+    ==================================
+    ENCONTRAR MAIOR PROBABILIDADE
+    ==================================
     */
 
-    let diagnosticos = [
+    let resultados = [
 
         {
-            nome: "Correia do motor",
+            nome: "Correia",
             valor: correia,
+
             motivo:
-            "A vibração acima do padrão sugere possível desgaste, folga ou desalinhamento da correia.",
+            "O nível de vibração está acima do padrão esperado.",
+
             acao:
-            "Inspecionar a correia com o trator desligado. Verificar rachaduras, desgaste e folga. Se houver dano, substituir conforme a especificação do fabricante."
+            "Inspecionar a correia, procurando desgaste, rachaduras, folgas ou desalinhamento."
         },
+
 
         {
             nome: "Filtro de ar",
             valor: filtro,
+
             motivo:
-            "A emissão de fumaça acima do padrão pode estar relacionada à restrição de entrada de ar.",
+            "A emissão de fumaça está acima do nível esperado.",
+
             acao:
-            "Inspecionar o filtro de ar. Caso esteja saturado ou danificado, realizar a substituição conforme o manual do fabricante."
+            "Verificar o filtro de ar e substituir caso esteja saturado ou danificado."
         },
+
 
         {
             nome: "Sistema de arrefecimento",
             valor: arrefecimento,
+
             motivo:
-            "A temperatura elevada indica possível dificuldade no controle térmico do motor.",
+            "A temperatura do motor está elevada.",
+
             acao:
-            "Após o motor esfriar completamente, realizar uma inspeção do sistema de arrefecimento seguindo o manual do trator."
+            "Após o motor esfriar, realizar uma inspeção do sistema de arrefecimento seguindo o manual do fabricante."
         },
+
 
         {
             nome: "Sistema do motor",
             valor: motor,
+
             motivo:
-            "A combinação de temperatura elevada com outros sinais anormais aumenta a probabilidade de uma falha no sistema do motor.",
+            "A combinação de temperatura e fumaça elevadas pode indicar uma condição anormal do motor.",
+
             acao:
-            "Não continuar operando o equipamento se houver sinais graves. Realizar uma inspeção técnica conforme o manual do fabricante."
+            "Realizar uma inspeção técnica do motor antes de continuar a operação se houver sinais importantes de falha."
+        },
+
+
+        {
+            nome: "Pneu / conjunto de rodagem",
+            valor: pneu,
+
+            motivo:
+            "A vibração elevada pode estar relacionada ao conjunto de rodagem, entre outras possibilidades.",
+
+            acao:
+            "Verificar visualmente os pneus, desgaste e pressão conforme as especificações do fabricante."
         }
 
     ];
 
 
-    diagnosticos.sort(function(a,b) {
-
-        return b.valor - a.valor;
-
-    });
+    resultados.sort(
+        (a,b) => b.valor - a.valor
+    );
 
 
-    let principal =
-        diagnosticos[0];
+    let melhor =
+        resultados[0];
 
 
     /*
-    ==========================================
-    NENHUM PROBLEMA
-    ==========================================
+    ==================================
+    TRATOR NORMAL
+    ==================================
     */
 
-    if (principal.valor < 25) {
+    if (melhor.valor < 25) {
 
 
         document.getElementById("caixa-status").className =
-            "cor-normal";
+            "normal";
+
 
         document.getElementById("caixa-status").innerHTML =
-            "🟢 TRATOR SEM FALHA PREDOMINANTE";
+            "🟢 CONDIÇÕES NORMAIS";
 
 
         document.getElementById("caixa-dica").innerHTML =
-            "💡 <strong>Dedução da IA:</strong><br>" +
-            "Os sinais analisados estão dentro de uma faixa que não indica uma peça específica com alta probabilidade de falha.";
+
+            "🧠 <strong>Previsão da IA:</strong><br>" +
+
+            "Os dados analisados não apresentaram um padrão forte " +
+            "o suficiente para apontar uma peça específica.";
 
 
         document.getElementById("caixa-eco").innerHTML =
-            "💰 Continue a manutenção preventiva para reduzir o risco de reparos emergenciais.";
+
+            "💰 A manutenção preventiva ajuda a evitar paradas inesperadas e gastos maiores.";
 
 
-        document.getElementById("caixa-certeza").innerHTML =
-            "Confiança no diagnóstico normal: 95%";
+        document.getElementById("caixa-certeza").innerText =
+            "Confiança do diagnóstico: 95%";
 
 
-        document.getElementById("diagnostico-peca").innerHTML = `
+        document.getElementById("resultado-peca").innerHTML = `
 
-            <div class="diagnostico"
-                 style="border-left-color:#2e7d32;">
+            <div class="peca"
+                 style="border-left-color:#2e7d32">
 
-                <h3>✅ Nenhuma troca indicada</h3>
+                <h3>
+                    ✅ Nenhuma peça indicada para troca
+                </h3>
 
                 <p>
-                    A IA não encontrou evidências suficientes
-                    para indicar a substituição de uma peça.
+                    Os sensores estão dentro de uma faixa
+                    considerada normal neste protótipo.
                 </p>
 
-                <span class="confianca">
-                    Monitoramento normal
+                <br>
+
+                <span class="percentual">
+                    Manutenção preventiva recomendada
                 </span>
 
             </div>
@@ -741,25 +834,30 @@ function calcularPrevisaoIA() {
         `;
 
 
-        document.getElementById("acoes-manutencao").innerHTML = `
+        document.getElementById("resultado-acao").innerHTML = `
 
             <div class="acao">
 
-                <strong>1. Continuar monitorando</strong>
+                <strong>
+                    1️⃣ Continuar monitorando
+                </strong>
 
                 <p>
-                    Faça novas leituras dos sensores periodicamente.
+                    Continue realizando leituras periódicas
+                    dos sensores.
                 </p>
 
             </div>
 
             <div class="acao">
 
-                <strong>2. Seguir a manutenção preventiva</strong>
+                <strong>
+                    2️⃣ Seguir o plano de manutenção
+                </strong>
 
                 <p>
-                    Respeite os intervalos recomendados
-                    pelo fabricante do trator.
+                    Respeite os intervalos e recomendações
+                    do fabricante do trator.
                 </p>
 
             </div>
@@ -778,31 +876,51 @@ function calcularPrevisaoIA() {
         document.getElementById("painel-resposta").style.display =
             "block";
 
+
         return;
+
     }
 
 
     /*
-    ==========================================
-    DIAGNÓSTICO PRINCIPAL
-    ==========================================
+    ==================================
+    CONFIANÇA
+    ==================================
     */
 
-
     let confianca =
-        Math.min(98, 55 + principal.valor);
+        Math.min(
+            98,
+            55 + melhor.valor
+        );
 
+
+    /*
+    ==================================
+    CLASSIFICAÇÃO DO RISCO
+    ==================================
+    */
 
     let classe;
+
+    let status;
 
 
     if (confianca >= 85) {
 
-        classe = "cor-alto";
+        classe = "perigo";
 
-    } else {
+        status =
+            "🔴 ALTA PROBABILIDADE DE FALHA";
 
-        classe = "cor-atencao";
+    }
+
+    else {
+
+        classe = "atencao";
+
+        status =
+            "🟠 ATENÇÃO — POSSÍVEL DESGASTE";
 
     }
 
@@ -812,100 +930,132 @@ function calcularPrevisaoIA() {
 
 
     document.getElementById("caixa-status").innerHTML =
-        "⚠️ POSSÍVEL FALHA DETECTADA";
+        status;
 
+
+    /*
+    ==================================
+    RESUMO
+    ==================================
+    */
 
     document.getElementById("caixa-dica").innerHTML =
 
         "🧠 <strong>Dedução da IA:</strong><br>" +
 
-        "A peça com maior probabilidade de apresentar desgaste é " +
+        "Entre os componentes analisados, " +
 
         "<strong>" +
-        principal.nome +
-        "</strong>." +
+        melhor.nome +
+        "</strong> apresentou o maior índice de probabilidade." +
 
         "<br><br>" +
 
-        principal.motivo;
+        melhor.motivo;
 
 
     document.getElementById("caixa-eco").innerHTML =
 
-        "💰 A manutenção preventiva pode evitar custos maiores " +
-        "causados por uma falha inesperada.";
+        "💰 A identificação antecipada pode ajudar a reduzir " +
+        "o risco de reparos emergenciais e tempo parado.";
 
 
-    document.getElementById("caixa-certeza").innerHTML =
+    document.getElementById("caixa-certeza").innerText =
 
-        "Confiança estimada da IA: " +
+        "Confiança estimada: " +
         confianca +
         "%";
 
 
     /*
-    ==========================================
+    ==================================
     ABA O QUE TROCAR
-    ==========================================
+    ==================================
     */
 
+    document.getElementById("resultado-peca").innerHTML = `
 
-    document.getElementById("diagnostico-peca").innerHTML = `
-
-        <div class="diagnostico">
+        <div class="peca">
 
             <h3>
-                🔧 ${principal.nome}
+                🔧 Peça provável:
+                ${melhor.nome}
             </h3>
 
             <p>
-                <strong>Por que a IA escolheu esta peça?</strong>
+                A análise dos sensores indicou
+                que esta é a peça com maior
+                probabilidade de apresentar
+                desgaste ou falha.
             </p>
 
-            <p>
-                ${principal.motivo}
-            </p>
+            <br>
 
-            <span class="confianca">
-                Probabilidade estimada: ${confianca}%
+            <span class="percentual">
+
+                Probabilidade estimada:
+                ${confianca}%
+
             </span>
 
+            <br><br>
+
+            <p>
+                <strong>Motivo:</strong><br>
+
+                ${melhor.motivo}
+
+            </p>
+
         </div>
 
     `;
 
 
     /*
-    ==========================================
+    ==================================
     ABA O QUE FAZER
-    ==========================================
+    ==================================
     */
 
-
-    document.getElementById("acoes-manutencao").innerHTML = `
+    document.getElementById("resultado-acao").innerHTML = `
 
         <div class="acao">
 
             <strong>
-                🛠️ Ação recomendada
+                🔎 1. Confirmar o diagnóstico
             </strong>
 
             <p>
-                ${principal.acao}
+                Inspecione fisicamente a peça indicada
+                antes de realizar qualquer substituição.
             </p>
 
         </div>
 
+
         <div class="acao">
 
             <strong>
-                🔎 Confirmação da previsão
+                🛠️ 2. Ação recomendada
             </strong>
 
             <p>
-                Antes de substituir a peça, confirme o diagnóstico
-                por meio de uma inspeção física e siga as orientações
-                do fabricante ou de um profissional qualificado.
+                ${melhor.acao}
+            </p>
+
+        </div>
+
+
+        <div class="acao">
+
+            <strong>
+                ✅ 3. Novo monitoramento
+            </strong>
+
+            <p>
+                Depois da manutenção, realize uma nova
+                leitura dos sensores para comparar os resultados.
             </p>
 
         </div>
@@ -914,16 +1064,16 @@ function calcularPrevisaoIA() {
 
 
     /*
-    ==========================================
+    ==================================
     HISTÓRICO
-    ==========================================
+    ==================================
     */
 
     adicionarHistorico(
         vibracao,
         temperatura,
         fumaca,
-        principal.nome
+        melhor.nome
     );
 
 
@@ -933,9 +1083,9 @@ function calcularPrevisaoIA() {
 }
 
 
-/* ==========================================
+/* ==================================
    HISTÓRICO
-========================================== */
+================================== */
 
 function adicionarHistorico(
     vibracao,
@@ -943,6 +1093,7 @@ function adicionarHistorico(
     fumaca,
     resultado
 ) {
+
 
     const tabela =
         document.getElementById("historico");
