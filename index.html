@@ -15,7 +15,6 @@
         input[type="range"] { width: 100%; accent-color: #2e7d32; }
         .val { float: right; color: #2e7d32; font-weight: bold; }
         
-        /* BOTÃO PRINCIPAL REESTRUTURADO */
         .btn-analisar-ia { background-color: #1565c0; color: white; border: none; padding: 15px; width: 100%; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: block; margin-top: 10px; }
         .btn-analisar-ia:hover { background-color: #0d47a1; }
         
@@ -101,7 +100,7 @@
         sucesso_alto: "<strong>Orientação Técnica:</strong> Condições ideais encontradas! Mantenha a rotina atual de manejo. Recomenda-se apenas o monitoramento preventivo semanal contra pragas oportunistas.",
         risco_seca: "<strong>Plano de Contingência:</strong> Risco severo de estresse hídrico! Ative o sistema de irrigação de emergência imediatamente. Considere cobrir o solo com palhada seca para reduzir a evapotranspiração.",
         encharcado: "<strong>Plano de Contingência:</strong> Saturação hídrica detectada! Interrompa qualquer sistema de irrigação ativo. Abra canais de drenagem na lavoura para evitar o apodrecimento das raízes e a proliferação de fungos.",
-        sucesso_medio: "<strong>Orientação Técnica:</strong> Estado de atenção. O clima ou solo apresenta variações instáveis. Aumente a frequência de checagem do solo e planeje uma irrigação leve nas próximas 24 horas se a temperatura subir."
+        sucesso_medio: "<strong>Orientação Técnica:</strong> Estado de atenção. O clima ou solo apresenta variações instáveis. Aumente a frequência de checagem do solo e planeje uma irrigação leve nas próximas 24 hours se a temperatura subir."
     };
 
     function atualizarValores() {
@@ -187,3 +186,4 @@
         let tabela = document.getElementById("tabela-historico").getElementsByTagName('tbody');
         let novaLinha = tabela.insertRow(0);
         
+        let c1 = novaLinha.insertCell(0);
