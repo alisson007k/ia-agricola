@@ -3,35 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Previsão Agrícola - Jovem Ciência</title>
+    <title>IA - Manutenção Preditiva Agrícola</title>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; width: 100%; text-align: center; }
-        h1 { color: #2e7d32; font-size: 24px; margin-bottom: 5px; }
+        .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 550px; width: 100%; text-align: center; }
+        h1 { color: #d32f2f; font-size: 24px; margin-bottom: 5px; }
         p { color: #666; font-size: 14px; margin-top: 0; }
         hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
         .input-group { margin-bottom: 20px; text-align: left; }
         label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; }
-        input[type="range"] { width: 100%; accent-color: #2e7d32; }
-        .val { float: right; color: #2e7d32; font-weight: bold; }
+        input[type="range"] { width: 100%; accent-color: #d32f2f; }
+        .val { float: right; color: #d32f2f; font-weight: bold; }
         
-        /* BOTÃO VERDE ORIGINAL PEDIDO */
+        /* BOTÃO VERDE ORIGINAL ATIVADO */
         .btn-verde { background-color: #2e7d32; color: white; border: none; padding: 15px; width: 100%; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: block; margin-top: 10px; }
         .btn-verde:hover { background-color: #1b5e20; }
         
         #painel-resposta { display: none; margin-top: 25px; text-align: left; }
         #caixa-status { padding: 15px; border-radius: 6px; font-weight: bold; margin-bottom: 10px; font-size: 15px; text-align: center; }
-        #caixa-dica { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #2e7d32; border-radius: 4px; font-size: 13px; line-height: 1.5; color: #444; margin-bottom: 10px; }
-        #caixa-eco { background-color: #e8f5e9; border: 1px dashed #2e7d32; padding: 12px; border-radius: 6px; font-size: 13px; color: #1b5e20; margin-bottom: 10px; font-weight: bold; }
+        #caixa-dica { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #d32f2f; border-radius: 4px; font-size: 13px; line-height: 1.5; color: #444; margin-bottom: 10px; }
+        #caixa-eco { background-color: #fff3e0; border: 1px dashed #e65100; padding: 12px; border-radius: 6px; font-size: 13px; color: #e65100; margin-bottom: 10px; font-weight: bold; }
         #caixa-certeza { font-size: 11px; color: #777; text-align: right; font-style: italic; }
         
-        .cor-alto { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
-        .cor-medio { background-color: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
-        .cor-seca { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
-        .cor-charco { background-color: #e1f5fe; color: #0277bd; border: 1px solid #81d4fa; }
+        .cor-normal { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+        .cor-filtro { background-color: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+        .cor-correia { background-color: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
+        .cor-radiador { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
 
         .historico-box { margin-top: 35px; text-align: left; }
-        .historico-box h3 { color: #2e7d32; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
+        .historico-box h3 { color: #d32f2f; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
         .table-wrap { max-height: 150px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
         th, td { padding: 8px; border-bottom: 1px solid #eee; }
@@ -41,26 +41,27 @@
 <body>
 
 <div class="container">
-    <h1>🌱 Previsão Agrícola Sustentável com IA</h1>
+    <h1>🚜 Diagnóstico Preditivo de Tratores com IA</h1>
     <p>Projeto de Mostra Científica - Jovem Ciência</p>
     <hr>
 
     <div class="input-group">
-        <label>Umidade do Solo: <span id="txt-umidade" class="val">50%</span></label>
-        <input type="range" id="slide-umidade" min="0" max="100" value="50" oninput="mudarValores()">
+        <label>Nível de Vibração do Motor: <span id="txt-vibra" class="val">Baixa (Normal)</span></label>
+        <input type="range" id="slide-vibra" min="0" max="2" value="0" oninput="mudarValores()">
     </div>
 
     <div class="input-group">
-        <label>Temperatura Média: <span id="txt-temp" class="val">25°C</span></label>
-        <input type="range" id="slide-temp" min="10" max="50" value="25" oninput="mudarValores()">
+        <label>Fumaça do Escapamento: <span id="txt-fumaca" class="val">Invisível (Normal)</span></label>
+        <input type="range" id="slide-fumaca" min="0" max="2" value="0" oninput="mudarValores()">
     </div>
 
     <div class="input-group">
-        <label>Dias Sem Chuva: <span id="txt-chuva" class="val">3 dias</span></label>
-        <input type="range" id="slide-chuva" min="0" max="30" value="3" oninput="mudarValores()">
+        <label>Temperatura do Painel: <span id="txt-temp" class="val">80°C (Ideal)</span></label>
+        <input type="range" id="slide-temp" min="40" max="120" value="80" oninput="mudarValores()">
     </div>
 
-    <button type="button" class="btn-verde" onclick="calcularPrevisaoIA()">📊 Rodar Algoritmo de Previsão</button>
+    <!-- BOTÃO VERDE ORIGINAL ATIVO -->
+    <button type="button" class="btn-verde" onclick="preverQuebraIA()">📊 Analisar Sinais com a IA</button>
 
     <div id="painel-resposta">
         <div id="caixa-status"></div>
@@ -70,15 +71,15 @@
     </div>
 
     <div class="historico-box">
-        <h3>📋 Registro de Monitoramento</h3>
+        <h3>📋 Histórico de Diagnósticos em Campo</h3>
         <div class="table-wrap">
             <table id="tabela-dados">
                 <thead>
                     <tr>
-                        <th>Solo</th>
+                        <th>Vibração</th>
+                        <th>Fumaça</th>
                         <th>Temp.</th>
-                        <th>Estiagem</th>
-                        <th>Veredicto IA</th>
+                        <th>Previsão da IA</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -88,59 +89,64 @@
 </div>
 
 <script>
-    // Pesos neurais da IA baseados na planilha de dados
-    const pesosModelo = {
-        alto:  { u: 2.5,  t: -1.2, c: -2.0, b: -0.5 },
-        seca:  { u: -3.0, t: 2.5,  c: 3.0,  b: -1.0 },
-        agua:  { u: 4.0,  t: -2.0, c: -4.0, b: -2.0 },
-        medio: { u: 0.5,  t: 0.5,  c: 0.2,  b: 0.0  }
+    // Pesos da Rede Neural ajustados para detecção de falhas mecânicas
+    const pesosMecanicos = {
+        normal:   { v: -2.0, f: -2.0, t: -1.5, b: 2.0  },
+        filtro:   { v: 0.5,  f: 3.5,  t: 0.5,  b: -1.0 },
+        correia:  { v: 4.0,  f: 0.5,  t: 1.0,  b: -1.5 },
+        radiador: { v: 1.0,  f: 2.0,  t: 4.5,  b: -2.0 }
     };
 
-    const textosDicas = {
-        alto:  "<strong>Orientação:</strong> Solo e clima perfeitos. Mantenha as regas atuais e faça vistorias semanais.",
-        seca:  "<strong>Alerta:</strong> Risco alto de seca! Inicie a irrigação de emergência e cubra a terra com folhas secas.",
-        agua:  "<strong>Alerta:</strong> Solo encharcado! Desligue os irrigadores e abra valas para escoar o excesso de água.",
-        medio: "<strong>Orientação:</strong> Clima instável. Monitore o campo de perto e faça uma rega leve se o calor aumentar."
+    const orientacoesMecanicas = {
+        normal:   "<strong>Status do Veículo:</strong> Todos os sistemas operando perfeitamente. Nenhuma intervenção necessária.",
+        filtro:   "<strong>Previsão de Falha:</strong> Filtro de Ar obstruído/sujo. A fumaça escura indica que o motor está queimando combustível com pouco oxigênio.",
+        correia:  "<strong>Previsão de Falha:</strong> Correia do alternador ou do motor ressecada/frouxa. A vibração severa indica desalinhamento mecânico iminente.",
+        radiador: "<strong>Previsão de Falha:</strong> Superaquecimento do sistema de arrefecimento (Radiador furado ou sem água). Pare o trator imediatamente para evitar fundir o motor."
     };
 
     function mudarValores() {
-        document.getElementById('txt-umidade').innerText = document.getElementById('slide-umidade').value + '%';
-        document.getElementById('txt-temp').innerText = document.getElementById('slide-temp').value + '°C';
-        document.getElementById('txt-chuva').innerText = document.getElementById('slide-chuva').value + ' dias';
+        let v = parseInt(document.getElementById('slide-vibra').value);
+        let f = parseInt(document.getElementById('slide-fumaca').value);
+        let t = parseInt(document.getElementById('slide-temp').value);
+
+        const textoVibra = ["Baixa (Normal)", "Moderada (Alerta)", "Alta (Anormal)"];
+        const textoFumaca = ["Invisível (Normal)", "Branca (Vapor de Água)", "Preta (Má Combustão)"];
+
+        document.getElementById('txt-vibra').innerText = textoVibra[v];
+        document.getElementById('txt-fumaca').innerText = textoFumaca[f];
+        document.getElementById('txt-temp').innerText = t + "°C";
     }
 
-    function calcularPrevisaoIA() {
-        let valU = parseInt(document.getElementById('slide-umidade').value);
+    function preverQuebraIA() {
+        let valV = parseInt(document.getElementById('slide-vibra').value);
+        let valF = parseInt(document.getElementById('slide-fumaca').value);
         let valT = parseInt(document.getElementById('slide-temp').value);
-        let valC = parseInt(document.getElementById('slide-chuva').value);
 
-        // Entrada normalizada (matemática da IA de 0 a 1)
-        let nU = valU / 100;
-        let nT = (valT - 10) / 40;
-        let nC = valC / 30;
+        // Normalização dos dados para a entrada do neurônio
+        let nV = valV / 2;
+        let nF = valF / 2;
+        let nT = (valT - 40) / 80;
 
-        let ativacoes = {};
+        let disparos = {};
         let somaTotal = 0;
 
-        // Executa a equação do neurônio artificial
-        for (let chave in pesosModelo) {
-            let p = pesosModelo[chave];
-            let calculo = (nU * p.u) + (nT * p.t) + (nC * p.c) + p.b;
-            ativacoes[chave] = Math.max(0.01, calculo + 5);
-            somaTotal += ativacoes[chave];
+        for (let peça in pesosMecanicos) {
+            let p = pesosMecanicos[peça];
+            let calculo = (nV * p.v) + (nF * p.f) + (nT * p.t) + p.b;
+            disparos[peça] = Math.max(0.01, calculo + 5);
+            somaTotal += disparos[peça];
         }
 
-        // Escolhe o resultado vencedor de maior valor
-        let maiorValor = -Infinity;
-        let veredicto = "";
-        for (let chave in ativacoes) {
-            if (ativacoes[chave] > maiorValor) {
-                maiorValor = ativacoes[chave];
-                veredicto = chave;
+        let maxScore = -Infinity;
+        let pecaVencedora = "";
+        for (let peça in disparos) {
+            if (disparos[peça] > maxScore) {
+                maxScore = disparos[peça];
+                pecaVencedora = peça;
             }
         }
 
-        let certeza = Math.round((ativacoes[veredicto] / somaTotal) * 100);
+        let certeza = Math.round((disparos[pecaVencedora] / somaTotal) * 100);
         
         let painel = document.getElementById('painel-resposta');
         let cStatus = document.getElementById('caixa-status');
@@ -151,43 +157,52 @@
         painel.style.display = "block";
         cStatus.className = "";
 
-        let nomePrint = "";
-        let aguaPoupada = 0;
+        let nomeExibicao = "";
+        let custoEvitado = 0;
 
-        if (veredicto === "alto") {
-            cStatus.innerHTML = "✅ Sucesso Alto";
-            cStatus.classList.add("cor-alto");
-            nomePrint = "Sucesso Alto";
-            aguaPoupada = 250;
-        } else if (veredicto === "seca") {
-            cStatus.innerHTML = "🚨 Risco de Seca";
-            cStatus.classList.add("cor-seca");
-            nomePrint = "Risco Seca";
-            aguaPoupada = 100;
-        } else if (veredicto === "agua") {
-            cStatus.innerHTML = "🌊 Solo Encharcado";
-            cStatus.classList.add("cor-charco");
-            nomePrint = "Encharcado";
-            aguaPoupada = 800;
+        if (pecaVencedora === "normal") {
+            cStatus.innerHTML = "✅ Sistema Operando Normalmente";
+            cStatus.classList.add("cor-normal");
+            nomeExibicao = "Normal";
+            custoEvitado = 0;
+        } else if (pecaVencedora === "filtro") {
+            cStatus.innerHTML = "⚠️ Alerta: Trocar Filtro de Ar";
+            cStatus.classList.add("cor-filtro");
+            nomeExibicao = "Troca Filtro Ar";
+            custoEvitado = 450;
+        } else if (pecaVencedora === "correia") {
+            cStatus.innerHTML = "⚠️ Alerta: Trocar Correia do Motor";
+            cStatus.classList.add("cor-correia");
+            nomeExibicao = "Troca Correia";
+            custoEvitado = 1200;
         } else {
-            cStatus.innerHTML = "⚠️ Sucesso Médio";
-            cStatus.classList.add("cor-medio");
-            nomePrint = "Sucesso Médio";
-            aguaPoupada = 150;
+            cStatus.innerHTML = "🚨 CRÍTICO: Risco no Radiador / Motor";
+            cStatus.classList.add("cor-radiador");
+            nomeExibicao = "Defeito Radiador";
+            custoEvitado = 8500;
         }
 
-        cDica.innerHTML = textosDicas[veredicto];
-        cEco.innerHTML = `🌳 Sustentabilidade: Evita o desperdício de ${aguaPoupada} litros de água por dia neste setor.`;
-        cCerteza.innerText = `Certeza matemática da Rede Neural: ${certeza}%`;
+        cDica.innerHTML = orientacoesMecanicas[pecaVencedora];
+        
+        if (custoEvitado > 0) {
+            cEco.style.display = "block";
+            cEco.innerHTML = `💰 Impacto Financeiro: Detectar essa falha antes da quebra evita um gasto de até R$ ${custoEvitado},00 em peças pesadas e reboque.`;
+        } else {
+            cEco.style.display = "none";
+        }
+        
+        cCerteza.innerText = `Certeza do modelo Perceptron: ${certeza}%`;
 
-        // Alimenta a tabela abaixo
+        // Alimentar Tabela Histórica
+        const textoVibra = ["Baixa", "Média", "Alta"];
+        const textoFumaca = ["Normal", "Branca", "Preta"];
+        
         let tabela = document.getElementById("tabela-dados").getElementsByTagName('tbody');
         let linha = tabela.insertRow(0);
-        linha.insertCell(0).innerText = valU + "%";
-        linha.insertCell(1).innerText = valT + "°C";
-        linha.insertCell(2).innerText = valC + "d";
-        linha.insertCell(3).innerText = nomePrint;
+        linha.insertCell(0).innerText = textoVibra[valV];
+        linha.insertCell(1).innerText = textoFumaca[valF];
+        linha.insertCell(2).innerText = valT + "°C";
+        linha.insertCell(3).innerText = nomeExibicao;
     }
 </script>
 </body>
-</html>
