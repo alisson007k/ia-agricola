@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA na Agricultura - Jovem Ciência</title>
+    <title>Previsão Agrícola - Jovem Ciência</title>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 550px; width: 100%; text-align: center; }
+        .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; width: 100%; text-align: center; }
         h1 { color: #2e7d32; font-size: 24px; margin-bottom: 5px; }
         p { color: #666; font-size: 14px; margin-top: 0; }
         hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
@@ -15,23 +15,24 @@
         input[type="range"] { width: 100%; accent-color: #2e7d32; }
         .val { float: right; color: #2e7d32; font-weight: bold; }
         
-        .btn-analisar-ia { background-color: #1565c0; color: white; border: none; padding: 15px; width: 100%; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: block; margin-top: 10px; }
-        .btn-analisar-ia:hover { background-color: #0d47a1; }
+        /* BOTÃO VERDE ORIGINAL PEDIDO */
+        .btn-verde { background-color: #2e7d32; color: white; border: none; padding: 15px; width: 100%; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; display: block; margin-top: 10px; }
+        .btn-verde:hover { background-color: #1b5e20; }
         
-        #resultado-container { display: none; margin-top: 25px; text-align: left; }
-        #resultado { padding: 15px; border-radius: 6px; font-weight: bold; margin-bottom: 10px; font-size: 15px; text-align: center; }
-        #recomendacao { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #1565c0; border-radius: 4px; font-size: 13px; line-height: 1.5; color: #444; margin-bottom: 10px; }
-        #painel-sustentavel { background-color: #e8f5e9; border: 1px dashed #2e7d32; padding: 12px; border-radius: 6px; font-size: 13px; color: #1b5e20; margin-bottom: 10px; font-weight: bold; }
-        #confianca-ia { font-size: 11px; color: #777; text-align: right; margin-top: 5px; font-style: italic; }
+        #painel-resposta { display: none; margin-top: 25px; text-align: left; }
+        #caixa-status { padding: 15px; border-radius: 6px; font-weight: bold; margin-bottom: 10px; font-size: 15px; text-align: center; }
+        #caixa-dica { background-color: #f9f9f9; padding: 15px; border-left: 4px solid #2e7d32; border-radius: 4px; font-size: 13px; line-height: 1.5; color: #444; margin-bottom: 10px; }
+        #caixa-eco { background-color: #e8f5e9; border: 1px dashed #2e7d32; padding: 12px; border-radius: 6px; font-size: 13px; color: #1b5e20; margin-bottom: 10px; font-weight: bold; }
+        #caixa-certeza { font-size: 11px; color: #777; text-align: right; font-style: italic; }
         
-        .sucesso-alto { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
-        .sucesso-medio { background-color: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
-        .risco-seca { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
-        .risco-encharcado { background-color: #e1f5fe; color: #0277bd; border: 1px solid #81d4fa; }
+        .cor-alto { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+        .cor-medio { background-color: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+        .cor-seca { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+        .cor-charco { background-color: #e1f5fe; color: #0277bd; border: 1px solid #81d4fa; }
 
-        .historico-section { margin-top: 35px; text-align: left; }
-        .historico-section h3 { color: #2e7d32; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
-        .table-wrapper { max-height: 150px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px; }
+        .historico-box { margin-top: 35px; text-align: left; }
+        .historico-box h3 { color: #2e7d32; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
+        .table-wrap { max-height: 150px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
         th, td { padding: 8px; border-bottom: 1px solid #eee; }
         th { background-color: #f7f9f8; font-weight: bold; color: #555; position: sticky; top: 0; }
@@ -42,37 +43,36 @@
 <div class="container">
     <h1>🌱 Previsão Agrícola Sustentável com IA</h1>
     <p>Projeto de Mostra Científica - Jovem Ciência</p>
-    <div id="status-ia">✅ Rede Neural Perceptron Carregada com Sucesso!</div>
     <hr>
 
     <div class="input-group">
-        <label>Umidade do Solo: <span id="val_umidade" class="val">50%</span></label>
-        <input type="range" id="umidade" min="0" max="100" value="50" oninput="atualizarValores()">
+        <label>Umidade do Solo: <span id="txt-umidade" class="val">50%</span></label>
+        <input type="range" id="slide-umidade" min="0" max="100" value="50" oninput="mudarValores()">
     </div>
 
     <div class="input-group">
-        <label>Temperatura Média: <span id="val_temp" class="val">25°C</span></label>
-        <input type="range" id="temp" min="10" max="50" value="25" oninput="atualizarValores()">
+        <label>Temperatura Média: <span id="txt-temp" class="val">25°C</span></label>
+        <input type="range" id="slide-temp" min="10" max="50" value="25" oninput="mudarValores()">
     </div>
 
     <div class="input-group">
-        <label>Dias Sem Chuva: <span id="val_chuva" class="val">3 dias</span></label>
-        <input type="range" id="chuva" min="0" max="30" value="3" oninput="atualizarValores()">
+        <label>Dias Sem Chuva: <span id="txt-chuva" class="val">3 dias</span></label>
+        <input type="range" id="slide-chuva" min="0" max="30" value="3" oninput="mudarValores()">
     </div>
 
-    <button type="button" class="btn-analisar-ia" onclick="preverSaude()">📊 Rodar Algoritmo de Previsão</button>
+    <button type="button" class="btn-verde" onclick="calcularPrevisaoIA()">📊 Rodar Algoritmo de Previsão</button>
 
-    <div id="resultado-container">
-        <div id="resultado"></div>
-        <div id="recomendacao"></div>
-        <div id="painel-sustentavel"></div>
-        <div id="confianca-ia"></div>
+    <div id="painel-resposta">
+        <div id="caixa-status"></div>
+        <div id="caixa-dica"></div>
+        <div id="caixa-eco"></div>
+        <div id="caixa-certeza"></div>
     </div>
 
-    <div class="historico-section">
-        <h3>📋 Registro Histórico de Monitoramento</h3>
-        <div class="table-wrapper">
-            <table id="tabela-historico">
+    <div class="historico-box">
+        <h3>📋 Registro de Monitoramento</h3>
+        <div class="table-wrap">
+            <table id="tabela-dados">
                 <thead>
                     <tr>
                         <th>Solo</th>
@@ -81,109 +81,113 @@
                         <th>Veredicto IA</th>
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    const PesosIA = {
-        sucesso_alto: { umidade: 2.5, temp: -1.2, chuva: -2.0, bias: -0.5 },
-        risco_seca: { umidade: -3.0, temp: 2.5, chuva: 3.0, bias: -1.0 },
-        encharcado: { umidade: 4.0, temp: -2.0, chuva: -4.0, bias: -2.0 },
-        sucesso_medio: { umidade: 0.5, temp: 0.5, chuva: 0.2, bias: 0.0 }
+    // Pesos neurais da IA baseados na planilha de dados
+    const pesosModelo = {
+        alto:  { u: 2.5,  t: -1.2, c: -2.0, b: -0.5 },
+        seca:  { u: -3.0, t: 2.5,  c: 3.0,  b: -1.0 },
+        agua:  { u: 4.0,  t: -2.0, c: -4.0, b: -2.0 },
+        medio: { u: 0.5,  t: 0.5,  c: 0.2,  b: 0.0  }
     };
 
-    const RecomendacoesMedicas = {
-        sucesso_alto: "<strong>Orientação Técnica:</strong> Condições ideais encontradas! Mantenha a rotina atual de manejo. Recomenda-se apenas o monitoramento preventivo semanal contra pragas oportunistas.",
-        risco_seca: "<strong>Plano de Contingência:</strong> Risco severo de estresse hídrico! Ative o sistema de irrigação de emergência imediatamente. Considere cobrir o solo com palhada seca para reduzir a evapotranspiração.",
-        encharcado: "<strong>Plano de Contingência:</strong> Saturação hídrica detectada! Interrompa qualquer sistema de irrigação ativo. Abra canais de drenagem na lavoura para evitar o apodrecimento das raízes e a proliferação de fungos.",
-        sucesso_medio: "<strong>Orientação Técnica:</strong> Estado de atenção. O clima ou solo apresenta variações instáveis. Aumente a frequência de checagem do solo e planeje uma irrigação leve nas próximas 24 hours se a temperatura subir."
+    const textosDicas = {
+        alto:  "<strong>Orientação:</strong> Solo e clima perfeitos. Mantenha as regas atuais e faça vistorias semanais.",
+        seca:  "<strong>Alerta:</strong> Risco alto de seca! Inicie a irrigação de emergência e cubra a terra com folhas secas.",
+        agua:  "<strong>Alerta:</strong> Solo encharcado! Desligue os irrigadores e abra valas para escoar o excesso de água.",
+        medio: "<strong>Orientação:</strong> Clima instável. Monitore o campo de perto e faça uma rega leve se o calor aumentar."
     };
 
-    function atualizarValores() {
-        document.getElementById('val_umidade').innerText = document.getElementById('umidade').value + '%';
-        document.getElementById('val_temp').innerText = document.getElementById('temp').value + '°C';
-        document.getElementById('val_chuva').innerText = document.getElementById('chuva').value + ' dias';
+    function mudarValores() {
+        document.getElementById('txt-umidade').innerText = document.getElementById('slide-umidade').value + '%';
+        document.getElementById('txt-temp').innerText = document.getElementById('slide-temp').value + '°C';
+        document.getElementById('txt-chuva').innerText = document.getElementById('slide-chuva').value + ' dias';
     }
 
-    function preverSaude() {
-        let umidadeNum = parseInt(document.getElementById('umidade').value);
-        let tempNum = parseInt(document.getElementById('temp').value);
-        let chuvaNum = parseInt(document.getElementById('chuva').value);
+    function calcularPrevisaoIA() {
+        let valU = parseInt(document.getElementById('slide-umidade').value);
+        let valT = parseInt(document.getElementById('slide-temp').value);
+        let valC = parseInt(document.getElementById('slide-chuva').value);
 
-        let u = umidadeNum / 100;
-        let t = (tempNum - 10) / 40;
-        let c = chuvaNum / 30;
-        
-        let container = document.getElementById('resultado-container');
-        let divResultado = document.getElementById('resultado');
-        let divRecomendacao = document.getElementById('recomendacao');
-        let divSustentavel = document.getElementById('painel-sustentavel');
-        let divConfianca = document.getElementById('confianca-ia');
+        // Entrada normalizada (matemática da IA de 0 a 1)
+        let nU = valU / 100;
+        let nT = (valT - 10) / 40;
+        let nC = valC / 30;
 
-        container.style.display = "block";
-        divResultado.className = ""; 
+        let ativacoes = {};
+        let somaTotal = 0;
 
-        let scores = {};
-        let somaAtivacoes = 0;
-        for (let classe in PesosIA) {
-            let p = PesosIA[classe];
-            let ativacao = (u * p.umidade) + (t * p.temp) + (c * p.chuva) + p.bias;
-            scores[classe] = Math.max(0.01, ativacao + 5); 
-            somaAtivacoes += scores[classe];
+        // Executa a equação do neurônio artificial
+        for (let chave in pesosModelo) {
+            let p = pesosModelo[chave];
+            let calculo = (nU * p.u) + (nT * p.t) + (nC * p.c) + p.b;
+            ativacoes[chave] = Math.max(0.01, calculo + 5);
+            somaTotal += ativacoes[chave];
         }
-        
-        let maiorScore = -Infinity;
+
+        // Escolhe o resultado vencedor de maior valor
+        let maiorValor = -Infinity;
         let veredicto = "";
-        for (let classe in scores) {
-            if (scores[classe] > maiorScore) {
-                maiorScore = scores[classe];
-                veredicto = classe;
+        for (let chave in ativacoes) {
+            if (ativacoes[chave] > maiorValor) {
+                maiorValor = ativacoes[chave];
+                veredicto = chave;
             }
         }
 
-        let porcentagemConfianca = Math.round((scores[veredicto] / somaAtivacoes) * 100);
-        let textoFormatadoHistorico = "";
-        let aguaSalva = 0;
+        let certeza = Math.round((ativacoes[veredicto] / somaTotal) * 100);
+        
+        let painel = document.getElementById('painel-resposta');
+        let cStatus = document.getElementById('caixa-status');
+        let cDica = document.getElementById('caixa-dica');
+        let cEco = document.getElementById('caixa-eco');
+        let cCerteza = document.getElementById('caixa-certeza');
 
-        if (veredicto === "sucesso_alto") {
-            divResultado.innerHTML = `✅ Sucesso Alto`;
-            divResultado.classList.add("sucesso-alto");
-            divRecomendacao.style.borderLeftColor = "#2e7d32";
-            textoFormatadoHistorico = "Sucesso Alto";
-            aguaSalva = 250;
-        } else if (veredicto === "risco_seca") {
-            divResultado.innerHTML = `🚨 Risco de Seca`;
-            divResultado.classList.add("risco-seca");
-            divRecomendacao.style.borderLeftColor = "#c62828";
-            textoFormatadoHistorico = "Risco Seca";
-            aguaSalva = 100;
-        } else if (veredicto === "encharcado") {
-            divResultado.innerHTML = `🌊 Solo Encharcado`;
-            divResultado.classList.add("risco-encharcado");
-            divRecomendacao.style.borderLeftColor = "#0277bd";
-            textoFormatadoHistorico = "Encharcado";
-            aguaSalva = 800;
+        painel.style.display = "block";
+        cStatus.className = "";
+
+        let nomePrint = "";
+        let aguaPoupada = 0;
+
+        if (veredicto === "alto") {
+            cStatus.innerHTML = "✅ Sucesso Alto";
+            cStatus.classList.add("cor-alto");
+            nomePrint = "Sucesso Alto";
+            aguaPoupada = 250;
+        } else if (veredicto === "seca") {
+            cStatus.innerHTML = "🚨 Risco de Seca";
+            cStatus.classList.add("cor-seca");
+            nomePrint = "Risco Seca";
+            aguaPoupada = 100;
+        } else if (veredicto === "agua") {
+            cStatus.innerHTML = "🌊 Solo Encharcado";
+            cStatus.classList.add("cor-charco");
+            nomePrint = "Encharcado";
+            aguaPoupada = 800;
         } else {
-            divResultado.innerHTML = `⚠️ Sucesso Médio`;
-            divResultado.classList.add("sucesso-medio");
-            divRecomendacao.style.borderLeftColor = "#f57f17";
-            textoFormatadoHistorico = "Sucesso Médio";
-            aguaSalva = 150;
+            cStatus.innerHTML = "⚠️ Sucesso Médio";
+            cStatus.classList.add("cor-medio");
+            nomePrint = "Sucesso Médio";
+            aguaPoupada = 150;
         }
 
-        divRecomendacao.innerHTML = RecomendacoesMedicas[veredicto];
-        divSustentavel.innerHTML = `🌳 Impacto Ecológico: Seguir este diagnóstico evita o desperdício de aproximadamente ${aguaSalva} litros de água por hectare/dia neste setor.`;
-        divConfianca.innerText = `Certeza do modelo matemático da IA: ${porcentagemConfianca}%`;
+        cDica.innerHTML = textosDicas[veredicto];
+        cEco.innerHTML = `🌳 Sustentabilidade: Evita o desperdício de ${aguaPoupada} litros de água por dia neste setor.`;
+        cCerteza.innerText = `Certeza matemática da Rede Neural: ${certeza}%`;
 
-        salvarNoHistorico(umidadeNum, tempNum, chuvaNum, textoFormatadoHistorico);
+        // Alimenta a tabela abaixo
+        let tabela = document.getElementById("tabela-dados").getElementsByTagName('tbody');
+        let linha = tabela.insertRow(0);
+        linha.insertCell(0).innerText = valU + "%";
+        linha.insertCell(1).innerText = valT + "°C";
+        linha.insertCell(2).innerText = valC + "d";
+        linha.insertCell(3).innerText = nomePrint;
     }
-
-    function salvarNoHistorico(u, t, c, res) {
-        let tabela = document.getElementById("tabela-historico").getElementsByTagName('tbody');
-        let novaLinha = tabela.insertRow(0);
-        
-        let c1 = novaLinha.insertCell(0);
+</script>
+</body>
+</html>
