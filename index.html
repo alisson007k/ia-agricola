@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA - Manutenção Preditiva Agrícola</title>
+    <title>IA - Manutenção Preditiva Avançada</title>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 550px; width: 100%; text-align: center; }
+        .container { background-color: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 580px; width: 100%; text-align: center; }
         h1 { color: #d32f2f; font-size: 24px; margin-bottom: 5px; }
         p { color: #666; font-size: 14px; margin-top: 0; }
         hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
@@ -26,13 +26,12 @@
         #caixa-certeza { font-size: 11px; color: #777; text-align: right; font-style: italic; }
         
         .cor-normal { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
-        .cor-filtro { background-color: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
-        .cor-correia { background-color: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
-        .cor-radiador { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+        .cor-alerta { background-color: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+        .cor-critico { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
 
         .historico-box { margin-top: 35px; text-align: left; }
         .historico-box h3 { color: #d32f2f; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
-        .table-wrap { max-height: 150px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px; }
+        .table-wrap { max-height: 160px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
         th, td { padding: 8px; border-bottom: 1px solid #eee; }
         th { background-color: #f7f9f8; font-weight: bold; color: #555; position: sticky; top: 0; }
@@ -41,12 +40,12 @@
 <body>
 
 <div class="container">
-    <h1>🚜 Diagnóstico Preditivo de Tratores com IA</h1>
+    <h1>🚜 IA Multi-Diagnóstico de Tratores</h1>
     <p>Projeto de Mostra Científica - Jovem Ciência</p>
     <hr>
 
     <div class="input-group">
-        <label>Nível de Vibração do Motor: <span id="txt-vibra" class="val">Baixa (Normal)</span></label>
+        <label>Nível de Vibração Geral: <span id="txt-vibra" class="val">Baixa (Normal)</span></label>
         <input type="range" id="slide-vibra" min="0" max="2" value="0" oninput="mudarValores()">
     </div>
 
@@ -56,12 +55,11 @@
     </div>
 
     <div class="input-group">
-        <label>Temperatura do Painel: <span id="txt-temp" class="val">80°C (Ideal)</span></label>
+        <label>Temperatura do Sistema: <span id="txt-temp" class="val">80°C (Ideal)</span></label>
         <input type="range" id="slide-temp" min="40" max="120" value="80" oninput="mudarValores()">
     </div>
 
-    <!-- BOTÃO VERDE ORIGINAL ATIVO -->
-    <button type="button" class="btn-verde" onclick="preverQuebraIA()">📊 Analisar Sinais com a IA</button>
+    <button type="button" class="btn-verde" onclick="preverQuebraIA()">📊 Rodar Diagnóstico Preditivo</button>
 
     <div id="painel-resposta">
         <div id="caixa-status"></div>
@@ -71,7 +69,7 @@
     </div>
 
     <div class="historico-box">
-        <h3>📋 Histórico de Diagnósticos em Campo</h3>
+        <h3>📋 Histórico de Componentes Analisados</h3>
         <div class="table-wrap">
             <table id="tabela-dados">
                 <thead>
@@ -89,19 +87,23 @@
 </div>
 
 <script>
-    // Pesos da Rede Neural ajustados para detecção de falhas mecânicas
+    // Configuração de pesos e calibração fina da Rede Neural
     const pesosMecanicos = {
-        normal:   { v: -2.0, f: -2.0, t: -1.5, b: 2.0  },
-        filtro:   { v: 0.5,  f: 3.5,  t: 0.5,  b: -1.0 },
-        correia:  { v: 4.0,  f: 0.5,  t: 1.0,  b: -1.5 },
-        radiador: { v: 1.0,  f: 2.0,  t: 4.5,  b: -2.0 }
+        normal:      { v: -3.0, f: -3.0, t: -2.0, b: 2.5  },
+        filtros:     { v: 0.2,  f: 4.0,  t: 0.8,  b: -1.0 },
+        pneus:       { v: 3.5,  f: -2.0, t: -1.0, b: -0.5 },
+        correias:    { v: 2.5,  f: 1.5,  t: 3.0,  b: -1.5 },
+        pinos_bucha: { v: 4.5,  f: -3.0, t: -2.0, b: -1.0 },
+        discos:      { v: 1.5,  f: 2.0,  t: 3.5,  b: -1.0 }
     };
 
     const orientacoesMecanicas = {
-        normal:   "<strong>Status do Veículo:</strong> Todos os sistemas operando perfeitamente. Nenhuma intervenção necessária.",
-        filtro:   "<strong>Previsão de Falha:</strong> Filtro de Ar obstruído/sujo. A fumaça escura indica que o motor está queimando combustível com pouco oxigênio.",
-        correia:  "<strong>Previsão de Falha:</strong> Correia do alternador ou do motor ressecada/frouxa. A vibração severa indica desalinhamento mecânico iminente.",
-        radiador: "<strong>Previsão de Falha:</strong> Superaquecimento do sistema de arrefecimento (Radiador furado ou sem água). Pare o trator imediatamente para evitar fundir o motor."
+        normal: "<strong>Status:</strong> Veículo saudável. Todos os sistemas mecânicos operam nos parâmetros ideais.",
+        filtros: "<strong>Recomendação Técnica:</strong> Efetuar a substituição dos Filtros (Ar, Óleo e Combustível). A queima incompleta gera fumaça preta e força as bombas injetoras.",
+        pneus: "<strong>Recomendação Técnica:</strong> Revisar Pneus e Calibragem. Trepidações contínuas em baixa temperatura indicam desgaste irregular da banda de rodagem ou desalinhamento.",
+        correias: "<strong>Recomendação Técnica:</strong> Troca de Correias e Mangueiras. O superaquecimento associado à fumaça clara indica perda de líquido de arrefecimento por mangueiras rompidas ou patinação da correia da bomba d'água.",
+        pinos_bucha: "<strong>Recomendação Técnica:</strong> Manutenção de Pinos e Buchas de Articulação. Vibração severa na estrutura móvel sem fumaça e sem calor indica folga crítica nos eixos de articulação mecânica.",
+        discos: "<strong>Recomendação Técnica:</strong> Substituir Discos de Embreagem e Freio. Patinação em alta temperatura sob carga de trabalho gera superaquecimento por atrito direto nos discos de fricção."
     };
 
     function mudarValores() {
@@ -109,8 +111,8 @@
         let f = parseInt(document.getElementById('slide-fumaca').value);
         let t = parseInt(document.getElementById('slide-temp').value);
 
-        const textoVibra = ["Baixa (Normal)", "Moderada (Alerta)", "Alta (Anormal)"];
-        const textoFumaca = ["Invisível (Normal)", "Branca (Vapor de Água)", "Preta (Má Combustão)"];
+        const textoVibra = ["Baixa (Normal)", "Moderada (Alerta)", "Alta (Severa)"];
+        const textoFumaca = ["Invisível (Normal)", "Branca / Vapor", "Preta (Combustão Má)"];
 
         document.getElementById('txt-vibra').innerText = textoVibra[v];
         document.getElementById('txt-fumaca').innerText = textoFumaca[f];
@@ -122,7 +124,6 @@
         let valF = parseInt(document.getElementById('slide-fumaca').value);
         let valT = parseInt(document.getElementById('slide-temp').value);
 
-        // Normalização dos dados para a entrada do neurônio
         let nV = valV / 2;
         let nF = valF / 2;
         let nT = (valT - 40) / 80;
@@ -161,48 +162,36 @@
         let custoEvitado = 0;
 
         if (pecaVencedora === "normal") {
-            cStatus.innerHTML = "✅ Sistema Operando Normalmente";
+            cStatus.innerHTML = "✅ Operação Segura e Normal";
             cStatus.classList.add("cor-normal");
             nomeExibicao = "Normal";
             custoEvitado = 0;
-        } else if (pecaVencedora === "filtro") {
-            cStatus.innerHTML = "⚠️ Alerta: Trocar Filtro de Ar";
-            cStatus.classList.add("cor-filtro");
-            nomeExibicao = "Troca Filtro Ar";
-            custoEvitado = 450;
-        } else if (pecaVencedora === "correia") {
-            cStatus.innerHTML = "⚠️ Alerta: Trocar Correia do Motor";
-            cStatus.classList.add("cor-correia");
-            nomeExibicao = "Troca Correia";
-            custoEvitado = 1200;
+        } else if (pecaVencedora === "filtros") {
+            cStatus.innerHTML = "⚠️ Manutenção: Kit de Filtros";
+            cStatus.classList.add("cor-alerta");
+            nomeExibicao = "Manut. Filtros";
+            custoEvitado = 600;
+        } else if (pecaVencedora === "pneus") {
+            cStatus.innerHTML = "⚠️ Manutenção: Pneus e Alinhamento";
+            cStatus.classList.add("cor-alerta");
+            nomeExibicao = "Revisão Pneus";
+            custoEvitado = 4000;
+        } else if (pecaVencedora === "correias") {
+            cStatus.innerHTML = "🚨 Risco: Correias e Mangueiras";
+            cStatus.classList.add("cor-critico");
+            nomeExibicao = "Correias/Mangueiras";
+            custoEvitado = 2500;
+        } else if (pecaVencedora === "pinos_bucha") {
+            cStatus.innerHTML = "⚠️ Manutenção: Pinos e Buchas";
+            cStatus.classList.add("cor-alerta");
+            nomeExibicao = "Pinos e Buchas";
+            custoEvitado = 1800;
         } else {
-            cStatus.innerHTML = "🚨 CRÍTICO: Risco no Radiador / Motor";
-            cStatus.classList.add("cor-radiador");
-            nomeExibicao = "Defeito Radiador";
-            custoEvitado = 8500;
+            cStatus.innerHTML = "🚨 Risco: Discos de Freio / Embreagem";
+            cStatus.classList.add("cor-critico");
+            nomeExibicao = "Discos Embreagem/Freio";
+            custoEvitado = 6500;
         }
 
         cDica.innerHTML = orientacoesMecanicas[pecaVencedora];
         
-        if (custoEvitado > 0) {
-            cEco.style.display = "block";
-            cEco.innerHTML = `💰 Impacto Financeiro: Detectar essa falha antes da quebra evita um gasto de até R$ ${custoEvitado},00 em peças pesadas e reboque.`;
-        } else {
-            cEco.style.display = "none";
-        }
-        
-        cCerteza.innerText = `Certeza do modelo Perceptron: ${certeza}%`;
-
-        // Alimentar Tabela Histórica
-        const textoVibra = ["Baixa", "Média", "Alta"];
-        const textoFumaca = ["Normal", "Branca", "Preta"];
-        
-        let tabela = document.getElementById("tabela-dados").getElementsByTagName('tbody');
-        let linha = tabela.insertRow(0);
-        linha.insertCell(0).innerText = textoVibra[valV];
-        linha.insertCell(1).innerText = textoFumaca[valF];
-        linha.insertCell(2).innerText = valT + "°C";
-        linha.insertCell(3).innerText = nomeExibicao;
-    }
-</script>
-</body>
