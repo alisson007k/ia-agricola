@@ -1,16 +1,18 @@
 ```html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>IA - Manutenção Preditiva</title>
+    <title>AgroIA - Manutenção Preditiva</title>
 
     <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -25,18 +27,18 @@
         }
 
         header {
-            background: linear-gradient(135deg, #14532d, #166534);
+            background: linear-gradient(135deg, #14532d, #16a34a);
             padding: 30px 20px;
             text-align: center;
         }
 
         header h1 {
-            font-size: 30px;
-            margin-bottom: 10px;
+            font-size: 32px;
+            margin-bottom: 8px;
         }
 
         header p {
-            color: #d1fae5;
+            color: #dcfce7;
         }
 
         .container {
@@ -47,7 +49,7 @@
 
         .card {
             background: #111d2e;
-            border: 1px solid #24344a;
+            border: 1px solid #26364b;
             border-radius: 18px;
             padding: 25px;
             margin-bottom: 20px;
@@ -61,15 +63,14 @@
 
         .status {
             background: #17263a;
-            border-radius: 10px;
             padding: 15px;
-            margin-bottom: 20px;
-            color: #cbd5e1;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
-        .status span {
-            font-weight: bold;
+        #statusIA {
             color: #facc15;
+            font-weight: bold;
         }
 
         .sensor {
@@ -82,7 +83,8 @@
             font-weight: bold;
         }
 
-        select {
+        select,
+        input {
             width: 100%;
             padding: 14px;
             border: 0;
@@ -95,7 +97,6 @@
         button {
             width: 100%;
             padding: 15px;
-            margin-top: 10px;
             border: 0;
             border-radius: 10px;
             background: #22c55e;
@@ -103,6 +104,7 @@
             font-size: 17px;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         button:hover {
@@ -114,12 +116,20 @@
             cursor: not-allowed;
         }
 
+        .btn-secundario {
+            background: #2563eb;
+        }
+
+        .btn-secundario:hover {
+            background: #1d4ed8;
+        }
+
         #resultado {
-            text-align: center;
-            padding: 30px;
-            border-radius: 15px;
             background: #0b1524;
             border: 2px solid #334155;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
         }
 
         #icone {
@@ -130,7 +140,7 @@
         #previsao {
             font-size: 27px;
             font-weight: bold;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         #explicacao {
@@ -144,10 +154,10 @@
         }
 
         .probabilidade {
-            margin: 12px 0;
+            margin: 14px 0;
         }
 
-        .probabilidade-topo {
+        .prob-topo {
             display: flex;
             justify-content: space-between;
             margin-bottom: 5px;
@@ -165,14 +175,28 @@
             height: 100%;
             width: 0%;
             background: #22c55e;
-            transition: width 0.8s;
+            transition: 0.7s;
+        }
+
+        .separador {
+            height: 1px;
+            background: #334155;
+            margin: 25px 0;
+        }
+
+        .sucesso {
+            color: #4ade80;
+        }
+
+        .erro {
+            color: #f87171;
         }
 
         .aviso {
-            margin-top: 20px;
             color: #94a3b8;
             font-size: 13px;
             line-height: 1.5;
+            margin-top: 15px;
         }
 
         footer {
@@ -180,44 +204,103 @@
             padding: 30px;
             color: #64748b;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
 <header>
-    <h1>🚜 IA de Manutenção Preditiva</h1>
-    <p>Rede Neural para análise de máquinas agrícolas</p>
+
+    <h1>🚜 AgroIA</h1>
+
+    <p>
+        Inteligência Artificial para manutenção preditiva
+    </p>
+
 </header>
 
 
 <div class="container">
 
-    <!-- TREINAMENTO -->
+
+    <!-- BANCO DE DADOS -->
+
     <div class="card">
 
-        <h2>🧠 Rede Neural</h2>
+        <h2>☁️ Banco de Dados</h2>
 
         <div class="status">
-            Status da IA:
-            <span id="statusIA">Aguardando treinamento...</span>
+
+            Status:
+            <span id="statusBanco">
+                Verificando conexão...
+            </span>
+
         </div>
 
-        <button id="btnTreinar" onclick="treinarIA()">
-            🧠 TREINAR REDE NEURAL
+        <p style="color:#94a3b8; line-height:1.5;">
+            Os registros dos veículos e das falhas reais
+            serão armazenados no Firebase Firestore.
+        </p>
+
+    </div>
+
+
+    <!-- IA -->
+
+    <div class="card">
+
+        <h2>🧠 Inteligência Artificial</h2>
+
+        <div class="status">
+
+            Status da rede:
+
+            <span id="statusIA">
+                Aguardando treinamento
+            </span>
+
+        </div>
+
+        <button
+            id="btnTreinar"
+            onclick="treinarIA()">
+
+            🧠 TREINAR IA
+
         </button>
 
     </div>
 
 
-    <!-- SENSORES -->
+    <!-- DADOS DO TRATOR -->
+
     <div class="card">
 
-        <h2>📡 Dados do Trator</h2>
+        <h2>🚜 Dados do Trator</h2>
+
 
         <div class="sensor">
 
-            <label>📳 Vibração do motor/chassi</label>
+            <label>
+                🚜 Identificação do trator
+            </label>
+
+            <input
+                id="trator"
+                placeholder="Ex: Trator 001">
+
+        </div>
+
+
+        <div class="sensor">
+
+            <label>
+                📳 Vibração do motor/chassi
+            </label>
 
             <select id="vibracao">
 
@@ -240,7 +323,9 @@
 
         <div class="sensor">
 
-            <label>💨 Fumaça do escapamento</label>
+            <label>
+                💨 Fumaça do escapamento
+            </label>
 
             <select id="fumaca">
 
@@ -263,7 +348,9 @@
 
         <div class="sensor">
 
-            <label>🌡️ Temperatura do motor</label>
+            <label>
+                🌡️ Temperatura do motor
+            </label>
 
             <select id="temperatura">
 
@@ -284,17 +371,23 @@
         </div>
 
 
-        <button id="btnPrever" onclick="fazerPrevisao()" disabled>
+        <button
+            id="btnPrever"
+            onclick="fazerPrevisao()"
+            disabled>
+
             🤖 ANALISAR COM IA
+
         </button>
 
     </div>
 
 
     <!-- RESULTADO -->
+
     <div class="card">
 
-        <h2>🔎 Resultado da IA</h2>
+        <h2>🔎 Previsão da IA</h2>
 
         <div id="resultado">
 
@@ -303,25 +396,38 @@
             </div>
 
             <div id="previsao">
-                IA aguardando
+                Aguardando análise
             </div>
 
             <p id="explicacao">
-                Primeiro treine a rede neural.
+                Treine a IA e informe os dados do trator.
             </p>
 
 
             <div class="probabilidades">
 
+
                 <div class="probabilidade">
 
-                    <div class="probabilidade-topo">
-                        <span>🔧 Filtro de ar entupido</span>
-                        <span id="p0">0%</span>
+                    <div class="prob-topo">
+
+                        <span>
+                            💨 Filtro de ar
+                        </span>
+
+                        <span id="p0">
+                            0%
+                        </span>
+
                     </div>
 
                     <div class="barra-fundo">
-                        <div id="b0" class="barra"></div>
+
+                        <div
+                            id="b0"
+                            class="barra">
+                        </div>
+
                     </div>
 
                 </div>
@@ -329,13 +435,25 @@
 
                 <div class="probabilidade">
 
-                    <div class="probabilidade-topo">
-                        <span>⚙️ Correia desgastada</span>
-                        <span id="p1">0%</span>
+                    <div class="prob-topo">
+
+                        <span>
+                            ⚙️ Correia
+                        </span>
+
+                        <span id="p1">
+                            0%
+                        </span>
+
                     </div>
 
                     <div class="barra-fundo">
-                        <div id="b1" class="barra"></div>
+
+                        <div
+                            id="b1"
+                            class="barra">
+                        </div>
+
                     </div>
 
                 </div>
@@ -343,13 +461,25 @@
 
                 <div class="probabilidade">
 
-                    <div class="probabilidade-topo">
-                        <span>🌡️ Radiador / falta de água</span>
-                        <span id="p2">0%</span>
+                    <div class="prob-topo">
+
+                        <span>
+                            🌡️ Radiador / água
+                        </span>
+
+                        <span id="p2">
+                            0%
+                        </span>
+
                     </div>
 
                     <div class="barra-fundo">
-                        <div id="b2" class="barra"></div>
+
+                        <div
+                            id="b2"
+                            class="barra">
+                        </div>
+
                     </div>
 
                 </div>
@@ -357,13 +487,25 @@
 
                 <div class="probabilidade">
 
-                    <div class="probabilidade-topo">
-                        <span>✅ Funcionamento perfeito</span>
-                        <span id="p3">0%</span>
+                    <div class="prob-topo">
+
+                        <span>
+                            ✅ Funcionamento perfeito
+                        </span>
+
+                        <span id="p3">
+                            0%
+                        </span>
+
                     </div>
 
                     <div class="barra-fundo">
-                        <div id="b3" class="barra"></div>
+
+                        <div
+                            id="b3"
+                            class="barra">
+                        </div>
+
                     </div>
 
                 </div>
@@ -372,141 +514,285 @@
 
         </div>
 
+    </div>
 
-        <p class="aviso">
-            ⚠️ Este é um protótipo educacional. Os dados usados
-            para treinamento são simulados. Não use as previsões
-            para decidir se uma máquina real está segura ou não.
+
+    <!-- REGISTRAR FALHA REAL -->
+
+    <div class="card">
+
+        <h2>🔧 Registrar resultado real</h2>
+
+        <p style="color:#94a3b8; line-height:1.5; margin-bottom:20px;">
+
+            Depois de verificar o trator, informe qual foi
+            realmente o problema. Esse registro será salvo
+            no banco de dados para formar o histórico da IA.
+
         </p>
 
+
+        <select id="defeitoReal">
+
+            <option value="">
+                Selecione o resultado real
+            </option>
+
+            <option value="0">
+                Filtro de ar entupido
+            </option>
+
+            <option value="1">
+                Correia do motor desgastada
+            </option>
+
+            <option value="2">
+                Radiador furado / falta de água
+            </option>
+
+            <option value="3">
+                Funcionamento perfeito
+            </option>
+
+        </select>
+
+
+        <button
+            class="btn-secundario"
+            onclick="salvarRegistro()">
+
+            💾 SALVAR REGISTRO
+
+        </button>
+
+
+        <div
+            id="mensagem"
+            style="margin-top:15px;">
+        </div>
+
     </div>
+
+
+    <p class="aviso">
+
+        ⚠️ Esta versão é um protótipo.
+        Os dados iniciais usados para treinar a rede
+        são simulados. Para uso real, precisamos coletar
+        dados de máquinas agrícolas reais.
+
+    </p>
+
 
 </div>
 
 
 <footer>
-    🚜 Projeto de Inteligência Artificial para Agricultura
+
+    🚜 AgroIA • Manutenção Preditiva
+
 </footer>
 
 
-<script>
+
+<script type="module">
+
+
+/*
+=========================================================
+FIREBASE
+=========================================================
+
+COLE A CONFIGURAÇÃO DO SEU PROJETO FIREBASE AQUI.
+
+Você vai conseguir essa configuração quando registrar
+seu aplicativo Web no Firebase.
+=========================================================
+*/
+
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+    apiKey: "COLOQUE_SUA_API_KEY",
+
+    authDomain: "SEU_PROJETO.firebaseapp.com",
+
+    projectId: "SEU_PROJECT_ID",
+
+    storageBucket: "SEU_PROJETO.firebasestorage.app",
+
+    messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+
+    appId: "SEU_APP_ID"
+
+};
+
+
+/*
+Inicializa Firebase
+*/
+
+let db = null;
+
+
+try {
+
+    const app =
+        initializeApp(firebaseConfig);
+
+    db =
+        getFirestore(app);
+
+
+    document.getElementById(
+        "statusBanco"
+    ).innerText =
+        "✅ Firebase conectado";
+
+    document.getElementById(
+        "statusBanco"
+    ).className =
+        "sucesso";
+
+
+} catch (erro) {
+
+    console.error(erro);
+
+    document.getElementById(
+        "statusBanco"
+    ).innerText =
+        "❌ Configure o Firebase";
+
+    document.getElementById(
+        "statusBanco"
+    ).className =
+        "erro";
+
+}
+
+
+/*
+=========================================================
+REDE NEURAL
+=========================================================
+*/
 
 let modelo = null;
 
 
 /*
-========================================================
-DADOS DE TREINAMENTO
-========================================================
-
-Cada exemplo possui:
-
-[vibração, fumaça, temperatura]
-
-Os valores são:
-
-0 = normal/fraco
-1 = médio
-2 = alto
-
-Saída:
-
-0 = filtro de ar
-1 = correia
-2 = radiador
-3 = perfeito
+Dados iniciais de treinamento.
 
 IMPORTANTE:
-Estes são dados fictícios para demonstração.
-========================================================
-*/
 
+Estes dados são APENAS exemplos fictícios.
+
+Quando tivermos dados reais, vamos substituir
+esses exemplos por dados reais coletados das máquinas.
+*/
 
 const dadosTreinamento = [
 
-    // FILTRO DE AR ENTUPIDO
+    // filtro de ar
 
-    [[1,2,0], 0],
-    [[1,2,1], 0],
-    [[2,2,0], 0],
-    [[2,2,1], 0],
-    [[1,2,0], 0],
-    [[2,2,0], 0],
+    [[1,2,0],0],
+    [[1,2,1],0],
+    [[2,2,0],0],
+    [[2,2,1],0],
+    [[1,2,0],0],
+    [[2,2,0],0],
 
-    // CORREIA DESGASTADA
+    // correia
 
-    [[2,0,0], 1],
-    [[2,0,1], 1],
-    [[2,1,0], 1],
-    [[2,1,1], 1],
-    [[1,0,0], 1],
-    [[1,1,1], 1],
+    [[2,0,0],1],
+    [[2,0,1],1],
+    [[2,1,0],1],
+    [[2,1,1],1],
+    [[1,0,0],1],
+    [[1,1,1],1],
 
-    // RADIADOR / FALTA DE ÁGUA
+    // radiador
 
-    [[0,0,2], 2],
-    [[1,0,2], 2],
-    [[0,1,2], 2],
-    [[1,1,2], 2],
-    [[2,0,2], 2],
-    [[0,2,2], 2],
+    [[0,0,2],2],
+    [[1,0,2],2],
+    [[0,1,2],2],
+    [[1,1,2],2],
+    [[2,0,2],2],
+    [[0,2,2],2],
 
-    // FUNCIONAMENTO PERFEITO
+    // perfeito
 
-    [[0,0,0], 3],
-    [[0,0,1], 3],
-    [[0,1,1], 3],
-    [[1,0,1], 3],
-    [[0,1,0], 3],
-    [[1,0,1], 3]
+    [[0,0,0],3],
+    [[0,0,1],3],
+    [[0,1,1],3],
+    [[1,0,1],3],
+    [[0,1,0],3],
+    [[1,0,1],3]
 
 ];
 
 
-async function treinarIA() {
+/*
+=========================================================
+TREINAR IA
+=========================================================
+*/
+
+window.treinarIA = async function() {
 
     const status =
-        document.getElementById("statusIA");
+        document.getElementById(
+            "statusIA"
+        );
+
 
     const botao =
-        document.getElementById("btnTreinar");
+        document.getElementById(
+            "btnTreinar"
+        );
+
 
     botao.disabled = true;
 
+
     status.innerText =
-        "Treinando...";
+        "Treinando rede neural...";
 
-
-    /*
-    Entrada da rede neural
-    */
 
     const entradas =
-        dadosTreinamento.map(item => item[0]);
+        dadosTreinamento.map(
+            item => item[0]
+        );
 
-
-    /*
-    Transformando as classes
-    em números binários.
-    */
 
     const saidas =
-        dadosTreinamento.map(item => {
+        dadosTreinamento.map(
+            item => {
 
-            const classe = item[1];
+                const vetor =
+                    [0,0,0,0];
 
-            const vetor = [0,0,0,0];
+                vetor[item[1]] = 1;
 
-            vetor[classe] = 1;
+                return vetor;
 
-            return vetor;
+            }
+        );
 
-        });
-
-
-    /*
-    Criando os tensores
-    */
 
     const xs =
         tf.tensor2d(entradas);
@@ -516,56 +802,50 @@ async function treinarIA() {
         tf.tensor2d(saidas);
 
 
-    /*
-    CRIANDO A REDE NEURAL
-    */
+    modelo =
+        tf.sequential();
 
-    modelo = tf.sequential();
-
-
-    /*
-    Primeira camada
-    */
 
     modelo.add(
+
         tf.layers.dense({
+
             inputShape: [3],
+
             units: 16,
+
             activation: "relu"
+
         })
+
     );
 
 
-    /*
-    Segunda camada
-    */
-
     modelo.add(
+
         tf.layers.dense({
+
             units: 16,
+
             activation: "relu"
+
         })
+
     );
 
 
-    /*
-    Camada de saída
-
-    4 neurônios =
-    4 possíveis problemas
-    */
-
     modelo.add(
+
         tf.layers.dense({
+
             units: 4,
+
             activation: "softmax"
+
         })
+
     );
 
-
-    /*
-    CONFIGURAÇÃO DO APRENDIZADO
-    */
 
     modelo.compile({
 
@@ -581,84 +861,61 @@ async function treinarIA() {
     });
 
 
-    /*
-    TREINANDO
-    */
+    await modelo.fit(
+        xs,
+        ys,
+        {
 
-    await modelo.fit(xs, ys, {
+            epochs: 300,
 
-        epochs: 300,
-
-        shuffle: true,
-
-        callbacks: {
-
-            onEpochEnd: function(epoch, logs) {
-
-                if (epoch % 25 === 0) {
-
-                    status.innerText =
-                        "Treinando... época " +
-                        epoch +
-                        "/300";
-
-                }
-
-            }
+            shuffle: true
 
         }
+    );
 
-    });
-
-
-    /*
-    Liberando memória
-    */
 
     xs.dispose();
     ys.dispose();
 
 
     status.innerText =
-        "✅ IA treinada!";
+        "✅ IA treinada";
 
 
-    status.style.color =
-        "#4ade80";
+    status.className =
+        "sucesso";
 
 
-    document.getElementById("btnPrever")
-        .disabled = false;
+    document.getElementById(
+        "btnPrever"
+    ).disabled = false;
 
 
     alert(
-        "A rede neural foi treinada com sucesso!"
+        "A rede neural foi treinada!"
     );
 
-}
+};
 
 
 /*
-========================================================
-FAZER PREVISÃO
-========================================================
+=========================================================
+PREVISÃO
+=========================================================
 */
 
-async function fazerPrevisao() {
+window.fazerPrevisao = async function() {
 
     if (!modelo) {
 
         alert(
-            "Primeiro treine a IA."
+            "Treine a IA primeiro."
         );
 
         return;
+
     }
 
-
-    /*
-    Pegando os dados dos sensores
-    */
 
     const vibracao =
         Number(
@@ -685,8 +942,23 @@ async function fazerPrevisao() {
 
 
     /*
-    Criando entrada para a IA
+    Guarda os dados atuais para
+    podermos registrar o resultado real.
     */
+
+    window.ultimoRegistro = {
+
+        vibracao:
+            vibracao,
+
+        fumaca:
+            fumaca,
+
+        temperatura:
+            temperatura
+
+    };
+
 
     const entrada =
         tf.tensor2d([[
@@ -696,11 +968,6 @@ async function fazerPrevisao() {
         ]]);
 
 
-    /*
-    PEDINDO PARA A REDE NEURAL
-    FAZER A PREVISÃO
-    */
-
     const previsao =
         modelo.predict(entrada);
 
@@ -708,11 +975,6 @@ async function fazerPrevisao() {
     const probabilidades =
         await previsao.data();
 
-
-    /*
-    Descobrindo a classe
-    com maior probabilidade
-    */
 
     let maior = 0;
 
@@ -734,10 +996,6 @@ async function fazerPrevisao() {
 
     }
 
-
-    /*
-    Nomes das classes
-    */
 
     const nomes = [
 
@@ -762,23 +1020,6 @@ async function fazerPrevisao() {
     ];
 
 
-    const explicacoes = [
-
-        "A rede neural encontrou um padrão semelhante aos exemplos de filtro de ar entupido.",
-
-        "A rede neural encontrou um padrão semelhante aos exemplos de desgaste da correia.",
-
-        "A rede neural encontrou um padrão semelhante aos exemplos de problema no sistema de arrefecimento.",
-
-        "A rede neural encontrou um padrão semelhante aos exemplos de funcionamento normal."
-
-    ];
-
-
-    /*
-    Mostrando resultado
-    */
-
     document.getElementById(
         "icone"
     ).innerText =
@@ -794,12 +1035,8 @@ async function fazerPrevisao() {
     document.getElementById(
         "explicacao"
     ).innerText =
-        explicacoes[maior];
+        "A rede neural analisou os três sinais e encontrou este padrão como o mais provável.";
 
-
-    /*
-    Mostrando as probabilidades
-    */
 
     for (
         let i = 0;
@@ -827,17 +1064,148 @@ async function fazerPrevisao() {
     }
 
 
-    /*
-    Liberando memória
-    */
+    window.ultimaPrevisao =
+        maior;
+
 
     entrada.dispose();
     previsao.dispose();
 
-}
+};
+
+
+/*
+=========================================================
+SALVAR RESULTADO REAL NO FIRESTORE
+=========================================================
+*/
+
+window.salvarRegistro = async function() {
+
+    const mensagem =
+        document.getElementById(
+            "mensagem"
+        );
+
+
+    if (!db) {
+
+        mensagem.innerHTML =
+            '<span class="erro">Firebase não configurado.</span>';
+
+        return;
+
+    }
+
+
+    if (!window.ultimoRegistro) {
+
+        mensagem.innerHTML =
+            '<span class="erro">Faça uma análise primeiro.</span>';
+
+        return;
+
+    }
+
+
+    const defeito =
+        document.getElementById(
+            "defeitoReal"
+        ).value;
+
+
+    if (defeito === "") {
+
+        mensagem.innerHTML =
+            '<span class="erro">Selecione o resultado real.</span>';
+
+        return;
+
+    }
+
+
+    const trator =
+        document.getElementById(
+            "trator"
+        ).value || "Não informado";
+
+
+    const nomes = [
+
+        "Filtro de ar entupido",
+
+        "Correia do motor desgastada",
+
+        "Radiador furado / falta de água",
+
+        "Funcionamento perfeito"
+
+    ];
+
+
+    try {
+
+        await addDoc(
+
+            collection(
+                db,
+                "registros_manutencao"
+            ),
+
+            {
+
+                trator:
+                    trator,
+
+                vibracao:
+                    window.ultimoRegistro.vibracao,
+
+                fumaca:
+                    window.ultimoRegistro.fumaca,
+
+                temperatura:
+                    window.ultimoRegistro.temperatura,
+
+                previsaoIA:
+                    window.ultimaPrevisao,
+
+                resultadoReal:
+                    Number(defeito),
+
+                nomeResultado:
+                    nomes[Number(defeito)],
+
+                criadoEm:
+                    serverTimestamp()
+
+            }
+
+        );
+
+
+        mensagem.innerHTML =
+            '<span class="sucesso">✅ Registro salvo no banco de dados!</span>';
+
+
+        document.getElementById(
+            "defeitoReal"
+        ).value = "";
+
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        mensagem.innerHTML =
+            '<span class="erro">❌ Erro ao salvar. Verifique as regras do Firebase.</span>';
+
+    }
+
+};
 
 </script>
 
 </body>
+
 </html>
 ```
