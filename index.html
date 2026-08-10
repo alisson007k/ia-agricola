@@ -1,6 +1,6 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,64 +13,86 @@
 <body>
 
 <header class="topo">
-    <div>
-        <h1>🚜 Trator IA</h1>
-        <p>Previsão inteligente de manutenção</p>
-    </div>
+    <h1>🚜 Trator IA</h1>
+    <p>Manutenção preditiva inteligente</p>
 </header>
 
+
+<!-- MENU -->
 <nav class="menu">
-    <button onclick="mostrarAba('inicio')">🏠 Início</button>
-    <button onclick="mostrarAba('filtros')">🌬️ Filtros</button>
-    <button onclick="mostrarAba('correias')">🔧 Correias</button>
-    <button onclick="mostrarAba('fluidos')">🛢️ Fluidos</button>
-    <button onclick="mostrarAba('injecao')">💉 Injeção</button>
-    <button onclick="mostrarAba('mangueiras')">🔩 Mangueiras</button>
-    <button onclick="mostrarAba('freios')">⚙️ Freios</button>
-    <button onclick="mostrarAba('previsao')">🤖 Previsão IA</button>
-    <button onclick="mostrarAba('historico')">📊 Histórico</button>
+
+    <button class="botao-aba" data-aba="inicio">🏠 Início</button>
+
+    <button class="botao-aba" data-aba="filtros">🌬️ Filtros</button>
+
+    <button class="botao-aba" data-aba="correias">🔧 Correias</button>
+
+    <button class="botao-aba" data-aba="fluidos">🛢️ Fluidos</button>
+
+    <button class="botao-aba" data-aba="injecao">💉 Injeção</button>
+
+    <button class="botao-aba" data-aba="mangueiras">🔩 Mangueiras</button>
+
+    <button class="botao-aba" data-aba="freios">⚙️ Freios</button>
+
+    <button class="botao-aba" data-aba="previsao">🤖 Previsão IA</button>
+
+    <button class="botao-aba" data-aba="historico">📊 Histórico</button>
+
 </nav>
+
 
 <main>
 
     <!-- INÍCIO -->
     <section id="inicio" class="aba ativa">
 
-        <h2>🚜 Painel do Trator</h2>
-
-        <p>
-            Sistema experimental para estimar a necessidade
-            de manutenção de componentes de tratores.
-        </p>
+        <div class="cabecalho-aba">
+            <h2>🚜 Painel do Trator</h2>
+            <p>
+                Sistema experimental para previsão de manutenção
+                de componentes agrícolas.
+            </p>
+        </div>
 
         <div class="cards">
 
             <div class="card">
-                <h3>⏱️ Horas do trator</h3>
+                <span>⏱️</span>
+                <h3>Horas do trator</h3>
                 <strong id="horasPainel">0 h</strong>
             </div>
 
             <div class="card">
-                <h3>🔧 Peças analisadas</h3>
+                <span>🔧</span>
+                <h3>Componentes</h3>
                 <strong>6</strong>
             </div>
 
             <div class="card">
-                <h3>🤖 Sistema</h3>
-                <strong class="verde">Ativo</strong>
+                <span>🤖</span>
+                <h3>Sistema</h3>
+                <strong class="verde">ATIVO</strong>
             </div>
 
         </div>
 
+
         <div class="informacao">
-            <h3>Como funciona?</h3>
+
+            <h3>💡 Como funciona?</h3>
 
             <p>
-                O sistema utiliza informações como horas de uso,
-                tempo desde a última manutenção e intensidade
-                de trabalho para estimar o momento em que uma
-                peça poderá precisar de manutenção.
+                O sistema utiliza dados como horas de funcionamento,
+                intensidade do trabalho e condições do ambiente
+                para estimar o desgaste dos componentes.
             </p>
+
+            <p>
+                A proposta é ajudar o operador a identificar
+                quais peças podem precisar de inspeção ou manutenção.
+            </p>
+
         </div>
 
     </section>
@@ -82,49 +104,74 @@
         <h2>🌬️ Filtros</h2>
 
         <p>
-            Filtros de ar, óleo e combustível ajudam a impedir
-            que impurezas causem danos ao motor.
+            Os filtros de ar, óleo e combustível ajudam a impedir
+            que impurezas cheguem aos componentes do motor.
         </p>
 
+
         <div class="peca">
-            <h3>Filtro de Ar</h3>
+
+            <h3>🌬️ Filtro de Ar</h3>
 
             <label>Horas desde a última troca</label>
-            <input type="number" id="filtroAr" value="0">
 
-            <button onclick="analisarPeca('filtroAr', 500, 'resultadoFiltroAr')">
+            <input type="number" id="filtroAr" min="0" value="0">
+
+            <button class="botao-analisar"
+                    data-input="filtroAr"
+                    data-limite="500"
+                    data-resultado="resultadoFiltroAr">
+
                 🤖 Analisar
+
             </button>
 
             <div id="resultadoFiltroAr" class="resultado"></div>
+
         </div>
 
 
         <div class="peca">
-            <h3>Filtro de Óleo</h3>
+
+            <h3>🛢️ Filtro de Óleo</h3>
 
             <label>Horas desde a última troca</label>
-            <input type="number" id="filtroOleo" value="0">
 
-            <button onclick="analisarPeca('filtroOleo', 250, 'resultadoFiltroOleo')">
+            <input type="number" id="filtroOleo" min="0" value="0">
+
+            <button class="botao-analisar"
+                    data-input="filtroOleo"
+                    data-limite="250"
+                    data-resultado="resultadoFiltroOleo">
+
                 🤖 Analisar
+
             </button>
 
             <div id="resultadoFiltroOleo" class="resultado"></div>
+
         </div>
 
 
         <div class="peca">
-            <h3>Filtro de Combustível</h3>
+
+            <h3>⛽ Filtro de Combustível</h3>
 
             <label>Horas desde a última troca</label>
-            <input type="number" id="filtroCombustivel" value="0">
 
-            <button onclick="analisarPeca('filtroCombustivel', 500, 'resultadoFiltroCombustivel')">
+            <input type="number" id="filtroCombustivel" min="0" value="0">
+
+            <button class="botao-analisar"
+                    data-input="filtroCombustivel"
+                    data-limite="500"
+                    data-resultado="resultadoFiltroCombustivel">
+
                 🤖 Analisar
+
             </button>
 
             <div id="resultadoFiltroCombustivel" class="resultado"></div>
+
         </div>
 
     </section>
@@ -136,18 +183,25 @@
         <h2>🔧 Correias</h2>
 
         <p>
-            As correias transmitem movimento para componentes
-            auxiliares e podem perder tensão ou ressecar.
+            As correias transmitem movimento para diversos
+            componentes auxiliares do trator.
         </p>
 
         <div class="peca">
 
+            <h3>🔧 Correias</h3>
+
             <label>Horas desde a última troca</label>
 
-            <input type="number" id="correiasHoras" value="0">
+            <input type="number" id="correiasHoras" min="0" value="0">
 
-            <button onclick="analisarPeca('correiasHoras', 1000, 'resultadoCorreias')">
+            <button class="botao-analisar"
+                    data-input="correiasHoras"
+                    data-limite="1000"
+                    data-resultado="resultadoCorreias">
+
                 🤖 Analisar
+
             </button>
 
             <div id="resultadoCorreias" class="resultado"></div>
@@ -164,17 +218,24 @@
 
         <p>
             Óleo do motor, óleo hidráulico e líquido de
-            arrefecimento perdem propriedades com o uso.
+            arrefecimento precisam ser monitorados.
         </p>
 
         <div class="peca">
 
+            <h3>🛢️ Fluidos</h3>
+
             <label>Horas desde a última troca</label>
 
-            <input type="number" id="fluidosHoras" value="0">
+            <input type="number" id="fluidosHoras" min="0" value="0">
 
-            <button onclick="analisarPeca('fluidosHoras', 500, 'resultadoFluidos')">
+            <button class="botao-analisar"
+                    data-input="fluidosHoras"
+                    data-limite="500"
+                    data-resultado="resultadoFluidos">
+
                 🤖 Analisar
+
             </button>
 
             <div id="resultadoFluidos" class="resultado"></div>
@@ -190,18 +251,25 @@
         <h2>💉 Bicos e Elementos de Injeção</h2>
 
         <p>
-            O desgaste dos componentes de injeção pode
-            interferir na potência e no consumo do motor.
+            O sistema de injeção influencia o funcionamento,
+            potência e consumo do motor.
         </p>
 
         <div class="peca">
 
+            <h3>💉 Bicos de Injeção</h3>
+
             <label>Horas desde a última verificação</label>
 
-            <input type="number" id="injecaoHoras" value="0">
+            <input type="number" id="injecaoHoras" min="0" value="0">
 
-            <button onclick="analisarPeca('injecaoHoras', 2000, 'resultadoInjecao')">
+            <button class="botao-analisar"
+                    data-input="injecaoHoras"
+                    data-limite="2000"
+                    data-resultado="resultadoInjecao">
+
                 🤖 Analisar
+
             </button>
 
             <div id="resultadoInjecao" class="resultado"></div>
@@ -217,18 +285,25 @@
         <h2>🔩 Mangueiras e Vedações</h2>
 
         <p>
-            Mangueiras, retentores e anéis podem ressecar
-            devido ao calor e à pressão.
+            Mangueiras, retentores e anéis podem sofrer
+            desgaste devido ao calor, pressão e uso.
         </p>
 
         <div class="peca">
 
+            <h3>🔩 Mangueiras e Vedações</h3>
+
             <label>Horas desde a última verificação</label>
 
-            <input type="number" id="mangueirasHoras" value="0">
+            <input type="number" id="mangueirasHoras" min="0" value="0">
 
-            <button onclick="analisarPeca('mangueirasHoras', 1500, 'resultadoMangueiras')">
+            <button class="botao-analisar"
+                    data-input="mangueirasHoras"
+                    data-limite="1500"
+                    data-resultado="resultadoMangueiras">
+
                 🤖 Analisar
+
             </button>
 
             <div id="resultadoMangueiras" class="resultado"></div>
@@ -241,21 +316,28 @@
     <!-- FREIOS -->
     <section id="freios" class="aba">
 
-        <h2>⚙️ Discos de Freio e Embreagem</h2>
+        <h2>⚙️ Freios e Embreagem</h2>
 
         <p>
-            Componentes submetidos a atrito sofrem desgaste
+            Discos de freio e embreagem sofrem desgaste
             de acordo com a intensidade da operação.
         </p>
 
         <div class="peca">
 
+            <h3>⚙️ Freios e Embreagem</h3>
+
             <label>Horas desde a última verificação</label>
 
-            <input type="number" id="freiosHoras" value="0">
+            <input type="number" id="freiosHoras" min="0" value="0">
 
-            <button onclick="analisarPeca('freiosHoras', 3000, 'resultadoFreios')">
+            <button class="botao-analisar"
+                    data-input="freiosHoras"
+                    data-limite="3000"
+                    data-resultado="resultadoFreios">
+
                 🤖 Analisar
+
             </button>
 
             <div id="resultadoFreios" class="resultado"></div>
@@ -265,42 +347,72 @@
     </section>
 
 
-    <!-- PREVISÃO -->
+    <!-- PREVISÃO IA -->
     <section id="previsao" class="aba">
 
-        <h2>🤖 Previsão de Manutenção</h2>
+        <h2>🤖 Previsão Inteligente</h2>
 
         <p>
-            Informe os dados de utilização do trator.
-            O sistema calculará uma estimativa experimental.
+            Informe as condições de utilização do trator.
         </p>
+
 
         <div class="formulario">
 
-            <label>Horas totais de uso do trator</label>
-            <input type="number" id="horasTrator" value="1000">
+            <label>Horas totais de uso</label>
+
+            <input type="number"
+                   id="horasTrator"
+                   min="0"
+                   value="1000">
+
 
             <label>Intensidade do trabalho</label>
 
             <select id="intensidade">
-                <option value="1">Leve</option>
-                <option value="1.2">Moderada</option>
-                <option value="1.5">Pesada</option>
+
+                <option value="1">
+                    Leve
+                </option>
+
+                <option value="1.2">
+                    Moderada
+                </option>
+
+                <option value="1.5">
+                    Pesada
+                </option>
+
             </select>
 
-            <label>Ambiente de trabalho</label>
+
+            <label>Condição do ambiente</label>
 
             <select id="ambiente">
-                <option value="1">Normal</option>
-                <option value="1.2">Poeira</option>
-                <option value="1.4">Muita poeira / barro</option>
+
+                <option value="1">
+                    Normal
+                </option>
+
+                <option value="1.2">
+                    Poeira
+                </option>
+
+                <option value="1.4">
+                    Muita poeira / barro
+                </option>
+
             </select>
 
-            <button class="botaoIA" onclick="preverManutencao()">
+
+            <button id="botaoPrevisao" class="botaoIA">
+
                 🤖 Fazer previsão
+
             </button>
 
         </div>
+
 
         <div id="resultadoIA" class="resultado grande"></div>
 
@@ -329,15 +441,22 @@
 
             </select>
 
+
             <label>Horas do trator</label>
 
-            <input type="number" id="horasHistorico">
+            <input type="number"
+                   id="horasHistorico"
+                   min="0">
 
-            <button onclick="adicionarHistorico()">
+
+            <button id="botaoHistorico">
+
                 ➕ Registrar manutenção
+
             </button>
 
         </div>
+
 
         <div id="listaHistorico"></div>
 
@@ -345,21 +464,27 @@
 
 </main>
 
+
 <footer>
 
     <p>
-        🚜 Trator IA — Projeto experimental de manutenção preditiva
+        🚜 Trator IA
     </p>
 
     <small>
-        As previsões são estimativas e não substituem
-        inspeções e recomendações do fabricante.
+        Projeto experimental de manutenção preditiva.
+    </small>
+
+    <small>
+        As previsões não substituem a inspeção de um profissional
+        ou as recomendações do fabricante.
     </small>
 
 </footer>
 
-<script src="script.js"></script>
+
+<!-- IMPORTANTE: JavaScript -->
+<script src="./script.js"></script>
 
 </body>
 </html>
-```
