@@ -1,124 +1,365 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA de Manutenção de Tratores</title>
-    
-    <!-- Importando o PyScript para rodar Python no HTML -->
-    <link rel="stylesheet" href="https://pyscript.net" />
-    <script type="module" src="https://pyscript.net"></script>
 
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
-        .container { max-width: 600px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: auto; }
-        h1, h2 { color: #333; text-align: center; }
-        label { font-weight: bold; display: block; margin-top: 15px; }
-        select, input, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
-        button { background-color: #2b7a78; color: white; border: none; font-size: 16px; cursor: pointer; margin-top: 20px; }
-        button:hover { background-color: #3aafa9; }
-        .resultado { margin-top: 25px; padding: 15px; background: #eef2f3; border-radius: 6px; }
-        .peca-status { margin-bottom: 15px; padding: 10px; border-left: 5px solid #ccc; background: white; }
-        .urgente { border-left-color: #d9534f; color: #d9534f; }
-        .atencao { border-left-color: #f0ad4e; color: #f0ad4e; }
-        .bom { border-left-color: #5cb85c; color: #5cb85c; }
-    </style>
+    <title>Trator IA - Manutenção Inteligente</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="container">
-    <h1>🚜 IA Preditiva de Tratores</h1>
-    <p style="text-align: center; color: #666;">Calcule o desgaste real das peças por inteligência matemática</p>
-
-    <!-- Formulário de Entrada -->
-    <label for="horas_uso">Horas atuais do Horímetro:</label>
-    <input type="number" id="horas_uso" value="300" min="0">
-
-    <label for="severidade">Severidade do Trabalho (Ambiente):</label>
-    <select id="severidade">
-        <option value="1.0">Leve (Transporte plano / Pouco pó)</option>
-        <option value="1.2">Moderado (Preparo de solo padrão)</option>
-        <option value="1.5">Pesado (Solo compactado / Muita poeira / Extremo)</option>
-    </select>
-
-    <label for="idade_maquina">Estado Geral / Idade do Trator:</label>
-    <select id="idade_maquina">
-        <option value="1.0">Novo (Até 2.000 horas)</option>
-        <option value="1.1">Intermediário (2.000 a 5.000 horas)</option>
-        <option value="1.25">Antigo (Mais de 5.000 horas)</option>
-    </select>
-
-    <button py-click="calcular_manutencao">Calcular Desgaste de Peças</button>
-
-    <!-- Painel de Resultados -->
-    <div class="resultado">
-        <h2>Relatório de Troca Recomendada</h2>
-        <div id="painel_resultados">Clique no botão acima para processar os dados em Python.</div>
+<header class="topo">
+    <div>
+        <h1>🚜 Trator IA</h1>
+        <p>Previsão inteligente de manutenção</p>
     </div>
-</div>
+</header>
 
-<!-- CÓDIGO PYTHON DA SUA IA -->
-<script type="py">
-from pyscript import document
+<nav class="menu">
+    <button onclick="mostrarAba('inicio')">🏠 Início</button>
+    <button onclick="mostrarAba('filtros')">🌬️ Filtros</button>
+    <button onclick="mostrarAba('correias')">🔧 Correias</button>
+    <button onclick="mostrarAba('fluidos')">🛢️ Fluidos</button>
+    <button onclick="mostrarAba('injecao')">💉 Injeção</button>
+    <button onclick="mostrarAba('mangueiras')">🔩 Mangueiras</button>
+    <button onclick="mostrarAba('freios')">⚙️ Freios</button>
+    <button onclick="mostrarAba('previsao')">🤖 Previsão IA</button>
+    <button onclick="mostrarAba('historico')">📊 Histórico</button>
+</nav>
 
-def calcular_manutencao(event):
-    # 1. Captura os dados digitados na tela usando Python
-    horas_atuais = float(document.querySelector("#horas_uso").value)
-    fator_s = float(document.querySelector("#severidade").value)
-    fator_a = float(document.querySelector("#idade_maquina").value)
-    
-    # 2. Base de dados técnica das peças (Tempo de fábrica padrão)
-    pecas = {
-        "Filtros (Ar, Óleo e Combustível)": {"limite": 400, "tipo": "filtro"},
-        "Correias": {"limite": 1200, "tipo": "correia"},
-        "Fluidos e Lubrificantes": {"limite": 250, "tipo": "fluido"},
-        "Bicos e Elementos de Injeção": {"limite": 3500, "tipo": "padrao"},
-        "Mangueiras e Vedações": {"limite": 2000, "tipo": "padrao"},
-        "Discos de Freio e Embreagem": {"limite": 5000, "tipo": "atrito"}
-    }
-    
-    html_gerado = ""
-    
-    # 3. Execução do Modelo Matemático Preditivo para cada peça
-    for nome_peca, dados in pecas.items():
-        limite_fabrica = dados["limite"]
-        
-        # Aplicação das fórmulas específicas discutidas no modelo
-        if dados["tipo"] == "filtro":
-            horas_limite_real = limite_fabrica / fator_s
-        elif dados["tipo"] == "correia":
-            horas_limite_real = limite_fabrica / fator_a
-        elif dados["tipo"] == "atrito":
-            horas_limite_real = limite_fabrica * (2.0 - fator_s)
-        else:
-            horas_limite_real = limite_fabrica / (fator_s * (fator_a * 0.8))
+<main>
 
-        # Calcula a vida útil restante em porcentagem
-        vida_restante = max(0, int(((horas_limite_real - (horas_atuais % horas_limite_real)) / horas_limite_real) * 100))
-        
-        # Determina a classe de urgência visual baseada no resultado numérico
-        if vida_restante <= 15:
-            classe_css = "peca-status urgente"
-            status_texto = "⚠️ TROCA IMEDIATA RECOMENDADA"
-        elif vida_restante <= 50:
-            classe_css = "peca-status atencao"
-            status_texto = "⚡ Planejar troca em breve"
-        else:
-            classe_css = "peca-status bom"
-            status_texto = "✅ Funcionamento Seguro"
-            
-        # Monta o bloco de resposta
-        html_gerado += f"""
-        <div class='{classe_css}'>
-            <strong>{nome_peca}</strong><br>
-            Vida Útil Restante: {vida_restante}%<br>
-            <small>Status: {status_texto} (Limite calculado: {int(horas_limite_real)}h)</small>
+    <!-- INÍCIO -->
+    <section id="inicio" class="aba ativa">
+
+        <h2>🚜 Painel do Trator</h2>
+
+        <p>
+            Sistema experimental para estimar a necessidade
+            de manutenção de componentes de tratores.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>⏱️ Horas do trator</h3>
+                <strong id="horasPainel">0 h</strong>
+            </div>
+
+            <div class="card">
+                <h3>🔧 Peças analisadas</h3>
+                <strong>6</strong>
+            </div>
+
+            <div class="card">
+                <h3>🤖 Sistema</h3>
+                <strong class="verde">Ativo</strong>
+            </div>
+
         </div>
-        """
-        
-    # 4. Devolve o resultado processado pelo Python direto para a tela
-    document.querySelector("#painel_resultados").innerHTML = html_gerado
-</script>
+
+        <div class="informacao">
+            <h3>Como funciona?</h3>
+
+            <p>
+                O sistema utiliza informações como horas de uso,
+                tempo desde a última manutenção e intensidade
+                de trabalho para estimar o momento em que uma
+                peça poderá precisar de manutenção.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- FILTROS -->
+    <section id="filtros" class="aba">
+
+        <h2>🌬️ Filtros</h2>
+
+        <p>
+            Filtros de ar, óleo e combustível ajudam a impedir
+            que impurezas causem danos ao motor.
+        </p>
+
+        <div class="peca">
+            <h3>Filtro de Ar</h3>
+
+            <label>Horas desde a última troca</label>
+            <input type="number" id="filtroAr" value="0">
+
+            <button onclick="analisarPeca('filtroAr', 500, 'resultadoFiltroAr')">
+                🤖 Analisar
+            </button>
+
+            <div id="resultadoFiltroAr" class="resultado"></div>
+        </div>
+
+
+        <div class="peca">
+            <h3>Filtro de Óleo</h3>
+
+            <label>Horas desde a última troca</label>
+            <input type="number" id="filtroOleo" value="0">
+
+            <button onclick="analisarPeca('filtroOleo', 250, 'resultadoFiltroOleo')">
+                🤖 Analisar
+            </button>
+
+            <div id="resultadoFiltroOleo" class="resultado"></div>
+        </div>
+
+
+        <div class="peca">
+            <h3>Filtro de Combustível</h3>
+
+            <label>Horas desde a última troca</label>
+            <input type="number" id="filtroCombustivel" value="0">
+
+            <button onclick="analisarPeca('filtroCombustivel', 500, 'resultadoFiltroCombustivel')">
+                🤖 Analisar
+            </button>
+
+            <div id="resultadoFiltroCombustivel" class="resultado"></div>
+        </div>
+
+    </section>
+
+
+    <!-- CORREIAS -->
+    <section id="correias" class="aba">
+
+        <h2>🔧 Correias</h2>
+
+        <p>
+            As correias transmitem movimento para componentes
+            auxiliares e podem perder tensão ou ressecar.
+        </p>
+
+        <div class="peca">
+
+            <label>Horas desde a última troca</label>
+
+            <input type="number" id="correiasHoras" value="0">
+
+            <button onclick="analisarPeca('correiasHoras', 1000, 'resultadoCorreias')">
+                🤖 Analisar
+            </button>
+
+            <div id="resultadoCorreias" class="resultado"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FLUIDOS -->
+    <section id="fluidos" class="aba">
+
+        <h2>🛢️ Fluidos e Lubrificantes</h2>
+
+        <p>
+            Óleo do motor, óleo hidráulico e líquido de
+            arrefecimento perdem propriedades com o uso.
+        </p>
+
+        <div class="peca">
+
+            <label>Horas desde a última troca</label>
+
+            <input type="number" id="fluidosHoras" value="0">
+
+            <button onclick="analisarPeca('fluidosHoras', 500, 'resultadoFluidos')">
+                🤖 Analisar
+            </button>
+
+            <div id="resultadoFluidos" class="resultado"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- INJEÇÃO -->
+    <section id="injecao" class="aba">
+
+        <h2>💉 Bicos e Elementos de Injeção</h2>
+
+        <p>
+            O desgaste dos componentes de injeção pode
+            interferir na potência e no consumo do motor.
+        </p>
+
+        <div class="peca">
+
+            <label>Horas desde a última verificação</label>
+
+            <input type="number" id="injecaoHoras" value="0">
+
+            <button onclick="analisarPeca('injecaoHoras', 2000, 'resultadoInjecao')">
+                🤖 Analisar
+            </button>
+
+            <div id="resultadoInjecao" class="resultado"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MANGUEIRAS -->
+    <section id="mangueiras" class="aba">
+
+        <h2>🔩 Mangueiras e Vedações</h2>
+
+        <p>
+            Mangueiras, retentores e anéis podem ressecar
+            devido ao calor e à pressão.
+        </p>
+
+        <div class="peca">
+
+            <label>Horas desde a última verificação</label>
+
+            <input type="number" id="mangueirasHoras" value="0">
+
+            <button onclick="analisarPeca('mangueirasHoras', 1500, 'resultadoMangueiras')">
+                🤖 Analisar
+            </button>
+
+            <div id="resultadoMangueiras" class="resultado"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FREIOS -->
+    <section id="freios" class="aba">
+
+        <h2>⚙️ Discos de Freio e Embreagem</h2>
+
+        <p>
+            Componentes submetidos a atrito sofrem desgaste
+            de acordo com a intensidade da operação.
+        </p>
+
+        <div class="peca">
+
+            <label>Horas desde a última verificação</label>
+
+            <input type="number" id="freiosHoras" value="0">
+
+            <button onclick="analisarPeca('freiosHoras', 3000, 'resultadoFreios')">
+                🤖 Analisar
+            </button>
+
+            <div id="resultadoFreios" class="resultado"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PREVISÃO -->
+    <section id="previsao" class="aba">
+
+        <h2>🤖 Previsão de Manutenção</h2>
+
+        <p>
+            Informe os dados de utilização do trator.
+            O sistema calculará uma estimativa experimental.
+        </p>
+
+        <div class="formulario">
+
+            <label>Horas totais de uso do trator</label>
+            <input type="number" id="horasTrator" value="1000">
+
+            <label>Intensidade do trabalho</label>
+
+            <select id="intensidade">
+                <option value="1">Leve</option>
+                <option value="1.2">Moderada</option>
+                <option value="1.5">Pesada</option>
+            </select>
+
+            <label>Ambiente de trabalho</label>
+
+            <select id="ambiente">
+                <option value="1">Normal</option>
+                <option value="1.2">Poeira</option>
+                <option value="1.4">Muita poeira / barro</option>
+            </select>
+
+            <button class="botaoIA" onclick="preverManutencao()">
+                🤖 Fazer previsão
+            </button>
+
+        </div>
+
+        <div id="resultadoIA" class="resultado grande"></div>
+
+    </section>
+
+
+    <!-- HISTÓRICO -->
+    <section id="historico" class="aba">
+
+        <h2>📊 Histórico de Manutenção</h2>
+
+        <div class="formulario">
+
+            <label>Peça</label>
+
+            <select id="pecaHistorico">
+
+                <option>Filtro de Ar</option>
+                <option>Filtro de Óleo</option>
+                <option>Filtro de Combustível</option>
+                <option>Correias</option>
+                <option>Fluidos</option>
+                <option>Bicos de Injeção</option>
+                <option>Mangueiras</option>
+                <option>Freios e Embreagem</option>
+
+            </select>
+
+            <label>Horas do trator</label>
+
+            <input type="number" id="horasHistorico">
+
+            <button onclick="adicionarHistorico()">
+                ➕ Registrar manutenção
+            </button>
+
+        </div>
+
+        <div id="listaHistorico"></div>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <p>
+        🚜 Trator IA — Projeto experimental de manutenção preditiva
+    </p>
+
+    <small>
+        As previsões são estimativas e não substituem
+        inspeções e recomendações do fabricante.
+    </small>
+
+</footer>
+
+<script src="script.js"></script>
 
 </body>
 </html>
+```
