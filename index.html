@@ -1,1127 +1,124 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA de Manutenção de Tratores</title>
+    
+    <!-- Importando o PyScript para rodar Python no HTML -->
+    <link rel="stylesheet" href="https://pyscript.net" />
+    <script type="module" src="https://pyscript.net"></script>
 
-<title>IA Agrícola - Jovem Ciência</title>
-
-<style>
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f7f4;
-    color: #333;
-}
-
-.container {
-    width: 95%;
-    max-width: 700px;
-    margin: 30px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-}
-
-/* CABEÇALHO */
-
-h1 {
-    text-align: center;
-    color: #2e7d32;
-    margin-bottom: 5px;
-}
-
-.subtitulo {
-    text-align: center;
-    color: #777;
-    font-size: 13px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-.projeto {
-    background: #e8f5e9;
-    border-left: 4px solid #2e7d32;
-    padding: 12px;
-    border-radius: 5px;
-    font-size: 13px;
-    line-height: 1.5;
-    margin-bottom: 25px;
-}
-
-/* SENSORES */
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group label {
-    display: block;
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 8px;
-}
-
-.val {
-    float: right;
-    color: #2e7d32;
-    font-weight: bold;
-}
-
-input[type="range"] {
-    width: 100%;
-    accent-color: #2e7d32;
-}
-
-/* BOTÃO */
-
-.btn-verde {
-    background-color: #2e7d32;
-    color: white;
-    border: none;
-    padding: 15px;
-    width: 100%;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.2s;
-    margin-top: 5px;
-}
-
-.btn-verde:hover {
-    background-color: #1b5e20;
-}
-
-/* RESULTADO */
-
-#painel-resposta {
-    display: none;
-    margin-top: 25px;
-}
-
-#caixa-status {
-    padding: 15px;
-    border-radius: 6px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-#caixa-dica {
-    background: #f9f9f9;
-    padding: 15px;
-    border-left: 4px solid #2e7d32;
-    border-radius: 4px;
-    font-size: 13px;
-    line-height: 1.6;
-    margin-bottom: 10px;
-}
-
-#caixa-eco {
-    background: #e8f5e9;
-    border: 1px dashed #2e7d32;
-    padding: 12px;
-    border-radius: 6px;
-    color: #1b5e20;
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-#caixa-certeza {
-    color: #777;
-    font-size: 11px;
-    text-align: right;
-    font-style: italic;
-}
-
-/* CORES */
-
-.normal {
-    background: #e8f5e9;
-    color: #2e7d32;
-    border: 1px solid #a5d6a7;
-}
-
-.atencao {
-    background: #fff8e1;
-    color: #f57f17;
-    border: 1px solid #ffe082;
-}
-
-.perigo {
-    background: #ffebee;
-    color: #c62828;
-    border: 1px solid #ef9a9a;
-}
-
-/* ABAS */
-
-.abas {
-    display: flex;
-    margin-top: 20px;
-    gap: 5px;
-}
-
-.aba-btn {
-    flex: 1;
-    padding: 13px 5px;
-    border: none;
-    background: #eeeeee;
-    color: #555;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 6px 6px 0 0;
-}
-
-.aba-btn.active {
-    background: #2e7d32;
-    color: white;
-}
-
-.aba-conteudo {
-    display: none;
-    padding: 18px;
-    border: 1px solid #eee;
-    border-top: none;
-    border-radius: 0 0 6px 6px;
-}
-
-.aba-conteudo.active {
-    display: block;
-}
-
-/* PEÇA */
-
-.peca {
-    background: #fafafa;
-    border-left: 5px solid #c62828;
-    padding: 15px;
-    border-radius: 5px;
-}
-
-.peca h3 {
-    margin-top: 0;
-    color: #333;
-}
-
-.percentual {
-    display: inline-block;
-    background: #e8f5e9;
-    color: #2e7d32;
-    padding: 6px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-/* AÇÃO */
-
-.acao {
-    background: #fafafa;
-    border-left: 4px solid #2e7d32;
-    padding: 14px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.acao strong {
-    color: #2e7d32;
-}
-
-.acao p {
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-/* HISTÓRICO */
-
-.historico-box {
-    margin-top: 30px;
-}
-
-.historico-box h3 {
-    color: #2e7d32;
-    font-size: 16px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 6px;
-}
-
-.table-wrap {
-    max-height: 180px;
-    overflow-y: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-    text-align: center;
-}
-
-th, td {
-    padding: 8px;
-    border-bottom: 1px solid #eee;
-}
-
-th {
-    background: #f7f9f8;
-    position: sticky;
-    top: 0;
-}
-
-.offline {
-    text-align: center;
-    color: #2e7d32;
-    font-size: 12px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-.rodape {
-    text-align: center;
-    color: #888;
-    font-size: 11px;
-    margin-top: 15px;
-}
-
-</style>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 600px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: auto; }
+        h1, h2 { color: #333; text-align: center; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        select, input, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { background-color: #2b7a78; color: white; border: none; font-size: 16px; cursor: pointer; margin-top: 20px; }
+        button:hover { background-color: #3aafa9; }
+        .resultado { margin-top: 25px; padding: 15px; background: #eef2f3; border-radius: 6px; }
+        .peca-status { margin-bottom: 15px; padding: 10px; border-left: 5px solid #ccc; background: white; }
+        .urgente { border-left-color: #d9534f; color: #d9534f; }
+        .atencao { border-left-color: #f0ad4e; color: #f0ad4e; }
+        .bom { border-left-color: #5cb85c; color: #5cb85c; }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
+    <h1>🚜 IA Preditiva de Tratores</h1>
+    <p style="text-align: center; color: #666;">Calcule o desgaste real das peças por inteligência matemática</p>
 
-<h1>🌱 IA Agrícola</h1>
+    <!-- Formulário de Entrada -->
+    <label for="horas_uso">Horas atuais do Horímetro:</label>
+    <input type="number" id="horas_uso" value="300" min="0">
 
-<div class="subtitulo">
-    Sistema de manutenção preditiva para tratores
+    <label for="severidade">Severidade do Trabalho (Ambiente):</label>
+    <select id="severidade">
+        <option value="1.0">Leve (Transporte plano / Pouco pó)</option>
+        <option value="1.2">Moderado (Preparo de solo padrão)</option>
+        <option value="1.5">Pesado (Solo compactado / Muita poeira / Extremo)</option>
+    </select>
+
+    <label for="idade_maquina">Estado Geral / Idade do Trator:</label>
+    <select id="idade_maquina">
+        <option value="1.0">Novo (Até 2.000 horas)</option>
+        <option value="1.1">Intermediário (2.000 a 5.000 horas)</option>
+        <option value="1.25">Antigo (Mais de 5.000 horas)</option>
+    </select>
+
+    <button py-click="calcular_manutencao">Calcular Desgaste de Peças</button>
+
+    <!-- Painel de Resultados -->
+    <div class="resultado">
+        <h2>Relatório de Troca Recomendada</h2>
+        <div id="painel_resultados">Clique no botão acima para processar os dados em Python.</div>
+    </div>
 </div>
 
-<div class="projeto">
-
-<strong>💡 Projeto Jovem Ciência</strong><br>
-
-A proposta utiliza Inteligência Artificial para analisar
-vibração, temperatura e fumaça do trator e estimar qual
-componente apresenta maior probabilidade de desgaste ou falha.
-
-</div>
-
-
-<!-- ==========================
-     SENSORES
-========================== -->
-
-<div class="input-group">
-
-<label>
-📳 Vibração do Trator
-
-<span id="txt-vibracao" class="val">
-30%
-</span>
-
-</label>
-
-<input
-type="range"
-id="slide-vibracao"
-min="0"
-max="100"
-value="30"
-oninput="mudarValores()"
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-🌡️ Temperatura do Motor
-
-<span id="txt-temp" class="val">
-75°C
-</span>
-
-</label>
-
-<input
-type="range"
-id="slide-temp"
-min="40"
-max="130"
-value="75"
-oninput="mudarValores()"
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-💨 Fumaça / Emissão
-
-<span id="txt-fumaca" class="val">
-20%
-</span>
-
-</label>
-
-<input
-type="range"
-id="slide-fumaca"
-min="0"
-max="100"
-value="20"
-oninput="mudarValores()"
->
-
-</div>
-
-
-<button
-class="btn-verde"
-onclick="preverFalha()"
->
-
-🤖 ANALISAR TRATOR COM IA
-
-</button>
-
-
-<!-- ==========================
-     RESULTADO
-========================== -->
-
-<div id="painel-resposta">
-
-<div id="caixa-status"></div>
-
-<div id="caixa-dica"></div>
-
-<div id="caixa-eco"></div>
-
-<div id="caixa-certeza"></div>
-
-
-<!-- ABAS -->
-
-<div class="abas">
-
-<button
-class="aba-btn active"
-onclick="abrirAba('trocar',this)"
->
-
-🔧 O Que Trocar
-
-</button>
-
-
-<button
-class="aba-btn"
-onclick="abrirAba('fazer',this)"
->
-
-🛠️ O Que Fazer
-
-</button>
-
-</div>
-
-
-<!-- ==========================
-     O QUE TROCAR
-========================== -->
-
-<div
-id="trocar"
-class="aba-conteudo active"
->
-
-<div id="resultado-peca"></div>
-
-</div>
-
-
-<!-- ==========================
-     O QUE FAZER
-========================== -->
-
-<div
-id="fazer"
-class="aba-conteudo"
->
-
-<div id="resultado-acao"></div>
-
-</div>
-
-</div>
-
-
-<!-- ==========================
-     HISTÓRICO
-========================== -->
-
-<div class="historico-box">
-
-<h3>
-📋 Registro de Monitoramento
-</h3>
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Vibração</th>
-<th>Temp.</th>
-<th>Fumaça</th>
-<th>Previsão</th>
-
-</tr>
-
-</thead>
-
-<tbody id="historico">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-
-<div class="offline">
-
-⚡ Protótipo preparado para funcionamento offline
-
-</div>
-
-
-<div class="rodape">
-
-Projeto experimental — Jovem Ciência
-
-</div>
-
-</div>
-
-
-<script>
-
-
-/* ==================================
-   ATUALIZA OS SENSORES
-================================== */
-
-function mudarValores() {
-
-    let vibracao =
-        Number(document.getElementById("slide-vibracao").value);
-
-    let temperatura =
-        Number(document.getElementById("slide-temp").value);
-
-    let fumaca =
-        Number(document.getElementById("slide-fumaca").value);
-
-
-    document.getElementById("txt-vibracao").innerText =
-        vibracao + "%";
-
-
-    document.getElementById("txt-temp").innerText =
-        temperatura + "°C";
-
-
-    document.getElementById("txt-fumaca").innerText =
-        fumaca + "%";
-
-}
-
-
-/* ==================================
-   ABAS
-================================== */
-
-function abrirAba(id, botao) {
-
-    document
-        .querySelectorAll(".aba-conteudo")
-        .forEach(function(aba) {
-
-            aba.classList.remove("active");
-
-        });
-
-
-    document
-        .querySelectorAll(".aba-btn")
-        .forEach(function(btn) {
-
-            btn.classList.remove("active");
-
-        });
-
-
-    document
-        .getElementById(id)
-        .classList.add("active");
-
-
-    botao.classList.add("active");
-
-}
-
-
-/* ==================================
-   FUNÇÃO PRINCIPAL DA IA
-================================== */
-
-function preverFalha() {
-
-
-    let vibracao =
-        Number(document.getElementById("slide-vibracao").value);
-
-    let temperatura =
-        Number(document.getElementById("slide-temp").value);
-
-    let fumaca =
-        Number(document.getElementById("slide-fumaca").value);
-
-
-    /*
-    ==================================
-    PONTUAÇÃO DOS COMPONENTES
-
-    Esta versão é uma BASE DE PROTÓTIPO.
-
-    Futuramente, essas regras podem
-    ser substituídas por uma Rede Neural
-    treinada com dados reais.
-    ==================================
-    */
-
-    let correia = 0;
-
-    let filtro = 0;
-
-    let arrefecimento = 0;
-
-    let motor = 0;
-
-    let pneu = 0;
-
-
-    /* CORREIA */
-
-    if (vibracao >= 40)
-        correia += 25;
-
-    if (vibracao >= 60)
-        correia += 25;
-
-    if (vibracao >= 80)
-        correia += 25;
-
-
-    /* FILTRO */
-
-    if (fumaca >= 30)
-        filtro += 20;
-
-    if (fumaca >= 50)
-        filtro += 25;
-
-    if (fumaca >= 70)
-        filtro += 30;
-
-
-    /* ARREFECIMENTO */
-
-    if (temperatura >= 85)
-        arrefecimento += 20;
-
-    if (temperatura >= 100)
-        arrefecimento += 30;
-
-    if (temperatura >= 115)
-        arrefecimento += 30;
-
-
-    /* MOTOR */
-
-    if (
-        temperatura >= 100 &&
-        fumaca >= 50
-    ) {
-
-        motor += 60;
-
+<!-- CÓDIGO PYTHON DA SUA IA -->
+<script type="py">
+from pyscript import document
+
+def calcular_manutencao(event):
+    # 1. Captura os dados digitados na tela usando Python
+    horas_atuais = float(document.querySelector("#horas_uso").value)
+    fator_s = float(document.querySelector("#severidade").value)
+    fator_a = float(document.querySelector("#idade_maquina").value)
+    
+    # 2. Base de dados técnica das peças (Tempo de fábrica padrão)
+    pecas = {
+        "Filtros (Ar, Óleo e Combustível)": {"limite": 400, "tipo": "filtro"},
+        "Correias": {"limite": 1200, "tipo": "correia"},
+        "Fluidos e Lubrificantes": {"limite": 250, "tipo": "fluido"},
+        "Bicos e Elementos de Injeção": {"limite": 3500, "tipo": "padrao"},
+        "Mangueiras e Vedações": {"limite": 2000, "tipo": "padrao"},
+        "Discos de Freio e Embreagem": {"limite": 5000, "tipo": "atrito"}
     }
-
-
-    if (
-        temperatura >= 110 &&
-        vibracao >= 60
-    ) {
-
-        motor += 30;
-
-    }
-
-
-    /* PNEU */
-
-    if (vibracao >= 65)
-        pneu += 15;
-
-
-    /*
-    ==================================
-    ENCONTRAR MAIOR PROBABILIDADE
-    ==================================
-    */
-
-    let resultados = [
-
-        {
-            nome: "Correia",
-            valor: correia,
-
-            motivo:
-            "O nível de vibração está acima do padrão esperado.",
-
-            acao:
-            "Inspecionar a correia, procurando desgaste, rachaduras, folgas ou desalinhamento."
-        },
-
-
-        {
-            nome: "Filtro de ar",
-            valor: filtro,
-
-            motivo:
-            "A emissão de fumaça está acima do nível esperado.",
-
-            acao:
-            "Verificar o filtro de ar e substituir caso esteja saturado ou danificado."
-        },
-
-
-        {
-            nome: "Sistema de arrefecimento",
-            valor: arrefecimento,
-
-            motivo:
-            "A temperatura do motor está elevada.",
-
-            acao:
-            "Após o motor esfriar, realizar uma inspeção do sistema de arrefecimento seguindo o manual do fabricante."
-        },
-
-
-        {
-            nome: "Sistema do motor",
-            valor: motor,
-
-            motivo:
-            "A combinação de temperatura e fumaça elevadas pode indicar uma condição anormal do motor.",
-
-            acao:
-            "Realizar uma inspeção técnica do motor antes de continuar a operação se houver sinais importantes de falha."
-        },
-
-
-        {
-            nome: "Pneu / conjunto de rodagem",
-            valor: pneu,
-
-            motivo:
-            "A vibração elevada pode estar relacionada ao conjunto de rodagem, entre outras possibilidades.",
-
-            acao:
-            "Verificar visualmente os pneus, desgaste e pressão conforme as especificações do fabricante."
-        }
-
-    ];
-
-
-    resultados.sort(
-        (a,b) => b.valor - a.valor
-    );
-
-
-    let melhor =
-        resultados[0];
-
-
-    /*
-    ==================================
-    TRATOR NORMAL
-    ==================================
-    */
-
-    if (melhor.valor < 25) {
-
-
-        document.getElementById("caixa-status").className =
-            "normal";
-
-
-        document.getElementById("caixa-status").innerHTML =
-            "🟢 CONDIÇÕES NORMAIS";
-
-
-        document.getElementById("caixa-dica").innerHTML =
-
-            "🧠 <strong>Previsão da IA:</strong><br>" +
-
-            "Os dados analisados não apresentaram um padrão forte " +
-            "o suficiente para apontar uma peça específica.";
-
-
-        document.getElementById("caixa-eco").innerHTML =
-
-            "💰 A manutenção preventiva ajuda a evitar paradas inesperadas e gastos maiores.";
-
-
-        document.getElementById("caixa-certeza").innerText =
-            "Confiança do diagnóstico: 95%";
-
-
-        document.getElementById("resultado-peca").innerHTML = `
-
-            <div class="peca"
-                 style="border-left-color:#2e7d32">
-
-                <h3>
-                    ✅ Nenhuma peça indicada para troca
-                </h3>
-
-                <p>
-                    Os sensores estão dentro de uma faixa
-                    considerada normal neste protótipo.
-                </p>
-
-                <br>
-
-                <span class="percentual">
-                    Manutenção preventiva recomendada
-                </span>
-
-            </div>
-
-        `;
-
-
-        document.getElementById("resultado-acao").innerHTML = `
-
-            <div class="acao">
-
-                <strong>
-                    1️⃣ Continuar monitorando
-                </strong>
-
-                <p>
-                    Continue realizando leituras periódicas
-                    dos sensores.
-                </p>
-
-            </div>
-
-            <div class="acao">
-
-                <strong>
-                    2️⃣ Seguir o plano de manutenção
-                </strong>
-
-                <p>
-                    Respeite os intervalos e recomendações
-                    do fabricante do trator.
-                </p>
-
-            </div>
-
-        `;
-
-
-        adicionarHistorico(
-            vibracao,
-            temperatura,
-            fumaca,
-            "Normal"
-        );
-
-
-        document.getElementById("painel-resposta").style.display =
-            "block";
-
-
-        return;
-
-    }
-
-
-    /*
-    ==================================
-    CONFIANÇA
-    ==================================
-    */
-
-    let confianca =
-        Math.min(
-            98,
-            55 + melhor.valor
-        );
-
-
-    /*
-    ==================================
-    CLASSIFICAÇÃO DO RISCO
-    ==================================
-    */
-
-    let classe;
-
-    let status;
-
-
-    if (confianca >= 85) {
-
-        classe = "perigo";
-
-        status =
-            "🔴 ALTA PROBABILIDADE DE FALHA";
-
-    }
-
-    else {
-
-        classe = "atencao";
-
-        status =
-            "🟠 ATENÇÃO — POSSÍVEL DESGASTE";
-
-    }
-
-
-    document.getElementById("caixa-status").className =
-        classe;
-
-
-    document.getElementById("caixa-status").innerHTML =
-        status;
-
-
-    /*
-    ==================================
-    RESUMO
-    ==================================
-    */
-
-    document.getElementById("caixa-dica").innerHTML =
-
-        "🧠 <strong>Dedução da IA:</strong><br>" +
-
-        "Entre os componentes analisados, " +
-
-        "<strong>" +
-        melhor.nome +
-        "</strong> apresentou o maior índice de probabilidade." +
-
-        "<br><br>" +
-
-        melhor.motivo;
-
-
-    document.getElementById("caixa-eco").innerHTML =
-
-        "💰 A identificação antecipada pode ajudar a reduzir " +
-        "o risco de reparos emergenciais e tempo parado.";
-
-
-    document.getElementById("caixa-certeza").innerText =
-
-        "Confiança estimada: " +
-        confianca +
-        "%";
-
-
-    /*
-    ==================================
-    ABA O QUE TROCAR
-    ==================================
-    */
-
-    document.getElementById("resultado-peca").innerHTML = `
-
-        <div class="peca">
-
-            <h3>
-                🔧 Peça provável:
-                ${melhor.nome}
-            </h3>
-
-            <p>
-                A análise dos sensores indicou
-                que esta é a peça com maior
-                probabilidade de apresentar
-                desgaste ou falha.
-            </p>
-
-            <br>
-
-            <span class="percentual">
-
-                Probabilidade estimada:
-                ${confianca}%
-
-            </span>
-
-            <br><br>
-
-            <p>
-                <strong>Motivo:</strong><br>
-
-                ${melhor.motivo}
-
-            </p>
-
+    
+    html_gerado = ""
+    
+    # 3. Execução do Modelo Matemático Preditivo para cada peça
+    for nome_peca, dados in pecas.items():
+        limite_fabrica = dados["limite"]
+        
+        # Aplicação das fórmulas específicas discutidas no modelo
+        if dados["tipo"] == "filtro":
+            horas_limite_real = limite_fabrica / fator_s
+        elif dados["tipo"] == "correia":
+            horas_limite_real = limite_fabrica / fator_a
+        elif dados["tipo"] == "atrito":
+            horas_limite_real = limite_fabrica * (2.0 - fator_s)
+        else:
+            horas_limite_real = limite_fabrica / (fator_s * (fator_a * 0.8))
+
+        # Calcula a vida útil restante em porcentagem
+        vida_restante = max(0, int(((horas_limite_real - (horas_atuais % horas_limite_real)) / horas_limite_real) * 100))
+        
+        # Determina a classe de urgência visual baseada no resultado numérico
+        if vida_restante <= 15:
+            classe_css = "peca-status urgente"
+            status_texto = "⚠️ TROCA IMEDIATA RECOMENDADA"
+        elif vida_restante <= 50:
+            classe_css = "peca-status atencao"
+            status_texto = "⚡ Planejar troca em breve"
+        else:
+            classe_css = "peca-status bom"
+            status_texto = "✅ Funcionamento Seguro"
+            
+        # Monta o bloco de resposta
+        html_gerado += f"""
+        <div class='{classe_css}'>
+            <strong>{nome_peca}</strong><br>
+            Vida Útil Restante: {vida_restante}%<br>
+            <small>Status: {status_texto} (Limite calculado: {int(horas_limite_real)}h)</small>
         </div>
-
-    `;
-
-
-    /*
-    ==================================
-    ABA O QUE FAZER
-    ==================================
-    */
-
-    document.getElementById("resultado-acao").innerHTML = `
-
-        <div class="acao">
-
-            <strong>
-                🔎 1. Confirmar o diagnóstico
-            </strong>
-
-            <p>
-                Inspecione fisicamente a peça indicada
-                antes de realizar qualquer substituição.
-            </p>
-
-        </div>
-
-
-        <div class="acao">
-
-            <strong>
-                🛠️ 2. Ação recomendada
-            </strong>
-
-            <p>
-                ${melhor.acao}
-            </p>
-
-        </div>
-
-
-        <div class="acao">
-
-            <strong>
-                ✅ 3. Novo monitoramento
-            </strong>
-
-            <p>
-                Depois da manutenção, realize uma nova
-                leitura dos sensores para comparar os resultados.
-            </p>
-
-        </div>
-
-    `;
-
-
-    /*
-    ==================================
-    HISTÓRICO
-    ==================================
-    */
-
-    adicionarHistorico(
-        vibracao,
-        temperatura,
-        fumaca,
-        melhor.nome
-    );
-
-
-    document.getElementById("painel-resposta").style.display =
-        "block";
-
-}
-
-
-/* ==================================
-   HISTÓRICO
-================================== */
-
-function adicionarHistorico(
-    vibracao,
-    temperatura,
-    fumaca,
-    resultado
-) {
-
-
-    const tabela =
-        document.getElementById("historico");
-
-
-    const linha =
-        tabela.insertRow(0);
-
-
-    linha.insertCell(0).innerText =
-        vibracao + "%";
-
-
-    linha.insertCell(1).innerText =
-        temperatura + "°C";
-
-
-    linha.insertCell(2).innerText =
-        fumaca + "%";
-
-
-    linha.insertCell(3).innerText =
-        resultado;
-
-}
-
+        """
+        
+    # 4. Devolve o resultado processado pelo Python direto para a tela
+    document.querySelector("#painel_resultados").innerHTML = html_gerado
 </script>
 
 </body>
 </html>
-```
