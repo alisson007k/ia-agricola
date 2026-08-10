@@ -1,80 +1,291 @@
-```javascript
 // ==========================================
-// SISTEMA TRATOR IA
+// TRATOR IA
+// SISTEMA DE MANUTENÇÃO PREDITIVA
 // ==========================================
 
 
-// TROCA DE ABA
-function mostrarAba(nome) {
+// ==========================================
+// SISTEMA DE ABAS
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const botoes = document.querySelectorAll(".botao-aba");
 
     const abas = document.querySelectorAll(".aba");
 
-    abas.forEach(function(aba) {
-        aba.classList.remove("ativa");
+
+    botoes.forEach(function (botao) {
+
+        botao.addEventListener("click", function () {
+
+            const nomeAba = botao.dataset.aba;
+
+
+            // Esconde todas as abas
+            abas.forEach(function (aba) {
+
+                aba.classList.remove("ativa");
+
+            });
+
+
+            // Remove destaque dos botões
+            botoes.forEach(function (b) {
+
+                b.classList.remove("ativo");
+
+            });
+
+
+            // Mostra a aba escolhida
+            const abaEscolhida =
+                document.getElementById(nomeAba);
+
+
+            if (abaEscolhida) {
+
+                abaEscolhida.classList.add("ativa");
+
+                botao.classList.add("ativo");
+
+            }
+
+
+            // Volta para o topo
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+        });
+
     });
 
-    document.getElementById(nome).classList.add("ativa");
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+    // ==========================================
+    // BOTÕES DE ANÁLISE
+    // ==========================================
+
+    const botoesAnalise =
+        document.querySelectorAll(".botao-analisar");
+
+
+    botoesAnalise.forEach(function (botao) {
+
+        botao.addEventListener("click", function () {
+
+            const idInput =
+                botao.dataset.input;
+
+            const limite =
+                Number(botao.dataset.limite);
+
+            const idResultado =
+                botao.dataset.resultado;
+
+
+            analisarPeca(
+                idInput,
+                limite,
+                idResultado
+            );
+
+        });
+
     });
-}
+
+
+    // ==========================================
+    // BOTÃO DA PREVISÃO
+    // ==========================================
+
+    const botaoPrevisao =
+        document.getElementById("botaoPrevisao");
+
+
+    if (botaoPrevisao) {
+
+        botaoPrevisao.addEventListener(
+            "click",
+            preverManutencao
+        );
+
+    }
+
+
+    // ==========================================
+    // BOTÃO DO HISTÓRICO
+    // ==========================================
+
+    const botaoHistorico =
+        document.getElementById("botaoHistorico");
+
+
+    if (botaoHistorico) {
+
+        botaoHistorico.addEventListener(
+            "click",
+            adicionarHistorico
+        );
+
+    }
+
+
+    // Mostra o histórico
+    mostrarHistorico();
+
+
+    // Ativa o botão Início
+    const inicio =
+        document.querySelector(
+            '.botao-aba[data-aba="inicio"]'
+        );
+
+
+    if (inicio) {
+
+        inicio.classList.add("ativo");
+
+    }
+
+});
 
 
 // ==========================================
-// ANÁLISE INDIVIDUAL DAS PEÇAS
+// ANÁLISE DE UMA PEÇA
 // ==========================================
 
-function analisarPeca(idInput, limite, idResultado) {
+function analisarPeca(
+    idInput,
+    limite,
+    idResultado
+) {
 
-    const horas = Number(document.getElementById(idInput).value);
+    const campo =
+        document.getElementById(idInput);
 
-    const resultado = document.getElementById(idResultado);
+    const resultado =
+        document.getElementById(idResultado);
 
-    if (horas < 0 || isNaN(horas)) {
 
-        resultado.innerHTML =
-            "⚠️ Informe um número válido de horas.";
+    if (!campo || !resultado) {
+
+        console.error(
+            "Elemento não encontrado."
+        );
 
         return;
+
     }
 
 
-    const percentual = horas / limite;
+    const horas =
+        Number(campo.value);
 
 
-    if (percentual >= 1) {
+    if (isNaN(horas) || horas < 0) {
+
+        resultado.innerHTML =
+            "⚠️ Digite uma quantidade válida de horas.";
+
+        return;
+
+    }
+
+
+    const porcentagem =
+        horas / limite;
+
+
+    if (porcentagem >= 1) {
 
         resultado.innerHTML = `
-            🔴 <strong>Alta prioridade</strong><br>
+
+            🔴 <strong>ATENÇÃO</strong>
+
+            <br><br>
+
             O intervalo de referência foi atingido.
-            Recomenda-se realizar uma inspeção e consultar
-            o manual do fabricante.
+
+            <br>
+
+            Recomenda-se realizar uma inspeção
+            e consultar as recomendações do fabricante.
+
         `;
 
-    } else if (percentual >= 0.75) {
-
-        const restante = Math.round(limite - horas);
-
-        resultado.innerHTML = `
-            🟡 <strong>Atenção</strong><br>
-            A peça está próxima do intervalo de manutenção.
-            Estimativa: aproximadamente
-            <strong>${restante} horas</strong> restantes.
-        `;
-
-    } else {
-
-        const restante = Math.round(limite - horas);
-
-        resultado.innerHTML = `
-            🟢 <strong>Baixo risco</strong><br>
-            Dentro do intervalo de referência.
-            Estimativa: aproximadamente
-            <strong>${restante} horas</strong> restantes.
-        `;
     }
+
+
+    else if (porcentagem >= 0.75) {
+
+        const restante =
+            Math.max(
+                0,
+                Math.round(limite - horas)
+            );
+
+
+        resultado.innerHTML = `
+
+            🟡 <strong>ATENÇÃO MODERADA</strong>
+
+            <br><br>
+
+            A peça está se aproximando
+            do intervalo de manutenção.
+
+            <br>
+
+            Estimativa de aproximadamente:
+
+            <strong>
+                ${restante} horas
+            </strong>
+
+            para nova avaliação.
+
+        `;
+
+    }
+
+
+    else {
+
+        const restante =
+            Math.max(
+                0,
+                Math.round(limite - horas)
+            );
+
+
+        resultado.innerHTML = `
+
+            🟢 <strong>RISCO BAIXO</strong>
+
+            <br><br>
+
+            A peça está dentro do intervalo
+            de referência utilizado pelo sistema.
+
+            <br>
+
+            Estimativa de aproximadamente:
+
+            <strong>
+                ${restante} horas
+            </strong>
+
+            para nova avaliação.
+
+        `;
+
+    }
+
 }
 
 
@@ -84,84 +295,113 @@ function analisarPeca(idInput, limite, idResultado) {
 
 function preverManutencao() {
 
-    const horas = Number(
-        document.getElementById("horasTrator").value
-    );
-
-    const intensidade = Number(
-        document.getElementById("intensidade").value
-    );
-
-    const ambiente = Number(
-        document.getElementById("ambiente").value
-    );
-
-    const resultado = document.getElementById("resultadoIA");
+    const horas =
+        Number(
+            document.getElementById(
+                "horasTrator"
+            ).value
+        );
 
 
-    if (horas < 0 || isNaN(horas)) {
+    const intensidade =
+        Number(
+            document.getElementById(
+                "intensidade"
+            ).value
+        );
+
+
+    const ambiente =
+        Number(
+            document.getElementById(
+                "ambiente"
+            ).value
+        );
+
+
+    const resultado =
+        document.getElementById(
+            "resultadoIA"
+        );
+
+
+    if (
+        isNaN(horas) ||
+        horas < 0
+    ) {
 
         resultado.innerHTML =
             "⚠️ Informe corretamente as horas do trator.";
 
         return;
+
     }
 
 
-    /*
-        MODELO EXPERIMENTAL
-
-        Quanto maior a intensidade e a agressividade
-        do ambiente, maior o fator de desgaste.
-    */
+    // ======================================
+    // MODELO PREDITIVO EXPERIMENTAL
+    // ======================================
 
     const fatorDesgaste =
         intensidade * ambiente;
 
 
-    let indice = horas * fatorDesgaste;
+    const indice =
+        horas * fatorDesgaste;
 
 
     let nivel;
+
     let mensagem;
 
 
     if (indice < 1500) {
 
         nivel = "🟢 BAIXO";
+
         mensagem =
             "O desgaste estimado está relativamente baixo.";
 
-    } else if (indice < 3000) {
-
-        nivel = "🟡 MÉDIO";
-        mensagem =
-            "Alguns componentes podem estar se aproximando da manutenção.";
-
-    } else {
-
-        nivel = "🔴 ALTO";
-        mensagem =
-            "O nível de desgaste estimado está elevado. Uma inspeção é recomendada.";
     }
 
 
-    /*
-        Estimativa simples de horas restantes.
+    else if (indice < 3000) {
 
-        Esta parte será substituída futuramente
-        por um modelo de Machine Learning.
-    */
+        nivel = "🟡 MÉDIO";
 
+        mensagem =
+            "Alguns componentes podem estar se aproximando da manutenção.";
+
+    }
+
+
+    else {
+
+        nivel = "🔴 ALTO";
+
+        mensagem =
+            "O desgaste estimado está elevado. Recomenda-se uma inspeção.";
+
+    }
+
+
+    // Estimativa experimental
     const vidaReferencia = 5000;
 
-    let horasRestantes =
+
+    const horasRestantes =
         Math.max(
+
             0,
+
             Math.round(
-                (vidaReferencia - indice) /
+
+                (vidaReferencia - indice)
+                /
                 fatorDesgaste
+
             )
+
         );
 
 
@@ -169,41 +409,62 @@ function preverManutencao() {
 
         <h3>🤖 Resultado da previsão</h3>
 
-        <p>
-            <strong>Nível estimado:</strong>
-            ${nivel}
-        </p>
+        <br>
 
-        <p>
-            <strong>Índice de desgaste:</strong>
-            ${Math.round(indice)}
-        </p>
+        <strong>Nível de desgaste:</strong>
 
-        <p>
-            <strong>Estimativa:</strong>
-            aproximadamente
-            <strong>${horasRestantes} horas</strong>
-            até uma nova avaliação.
-        </p>
+        ${nivel}
 
-        <p>
-            ${mensagem}
-        </p>
+        <br><br>
+
+        <strong>Índice calculado:</strong>
+
+        ${Math.round(indice)}
+
+        <br><br>
+
+        <strong>Estimativa:</strong>
+
+        aproximadamente
+
+        <strong>
+            ${horasRestantes} horas
+        </strong>
+
+        para uma nova avaliação.
+
+        <br><br>
+
+        ${mensagem}
 
         <hr>
 
         <small>
-            Esta é uma demonstração de um modelo preditivo.
-            Não representa diagnóstico mecânico e deve ser
-            validada com dados reais e recomendações do fabricante.
+
+            ⚠️ Este é um modelo experimental.
+            A previsão não representa um diagnóstico
+            mecânico e deve ser comparada com dados
+            reais e recomendações do fabricante.
+
         </small>
+
     `;
 
 
-    // Atualiza o painel inicial
+    // Atualiza o painel
+    const painel =
+        document.getElementById(
+            "horasPainel"
+        );
 
-    document.getElementById("horasPainel").innerText =
-        horas + " h";
+
+    if (painel) {
+
+        painel.textContent =
+            horas + " h";
+
+    }
+
 }
 
 
@@ -211,28 +472,57 @@ function preverManutencao() {
 // HISTÓRICO
 // ==========================================
 
-let historico =
-    JSON.parse(
-        localStorage.getItem("historicoTrator")
-    ) || [];
+let historico = [];
 
+
+try {
+
+    historico =
+        JSON.parse(
+            localStorage.getItem(
+                "historicoTrator"
+            )
+        ) || [];
+
+}
+catch (erro) {
+
+    historico = [];
+
+}
+
+
+// ==========================================
+// ADICIONAR MANUTENÇÃO
+// ==========================================
 
 function adicionarHistorico() {
 
     const peca =
-        document.getElementById("pecaHistorico").value;
+        document.getElementById(
+            "pecaHistorico"
+        ).value;
+
 
     const horas =
         Number(
-            document.getElementById("horasHistorico").value
+            document.getElementById(
+                "horasHistorico"
+            ).value
         );
 
 
-    if (!horas || horas < 0) {
+    if (
+        isNaN(horas) ||
+        horas < 0
+    ) {
 
-        alert("Informe as horas do trator.");
+        alert(
+            "Digite corretamente as horas do trator."
+        );
 
         return;
+
     }
 
 
@@ -242,7 +532,11 @@ function adicionarHistorico() {
 
         horas: horas,
 
-        data: new Date().toLocaleDateString("pt-BR")
+        data:
+            new Date()
+                .toLocaleDateString(
+                    "pt-BR"
+                )
 
     };
 
@@ -251,8 +545,11 @@ function adicionarHistorico() {
 
 
     localStorage.setItem(
+
         "historicoTrator",
+
         JSON.stringify(historico)
+
     );
 
 
@@ -262,21 +559,44 @@ function adicionarHistorico() {
 
 
     mostrarHistorico();
+
 }
 
+
+// ==========================================
+// MOSTRAR HISTÓRICO
+// ==========================================
 
 function mostrarHistorico() {
 
     const lista =
-        document.getElementById("listaHistorico");
+        document.getElementById(
+            "listaHistorico"
+        );
+
+
+    if (!lista) {
+
+        return;
+
+    }
 
 
     if (historico.length === 0) {
 
-        lista.innerHTML =
-            "<p>Nenhuma manutenção registrada.</p>";
+        lista.innerHTML = `
+
+            <div class="informacao">
+
+                📋 Nenhuma manutenção
+                registrada ainda.
+
+            </div>
+
+        `;
 
         return;
+
     }
 
 
@@ -286,10 +606,13 @@ function mostrarHistorico() {
     historico
         .slice()
         .reverse()
-        .forEach(function(registro) {
+        .forEach(function (registro) {
 
             const div =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             div.className =
                 "historico-item";
@@ -297,13 +620,13 @@ function mostrarHistorico() {
 
             div.innerHTML = `
 
-                <strong>
+                🔧 <strong>
                     ${registro.peca}
                 </strong>
 
                 <br>
 
-                🚜 Horas:
+                🚜 Horas do trator:
                 ${registro.horas}
 
                 <br>
@@ -317,9 +640,5 @@ function mostrarHistorico() {
             lista.appendChild(div);
 
         });
+
 }
-
-
-// Inicializar histórico
-mostrarHistorico();
-```
