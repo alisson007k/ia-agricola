@@ -1,4 +1,3 @@
-```css
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,60 +5,93 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #f1f5f2;
-    color: #1d2b20;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #eef3ef;
+    color: #17251b;
 }
 
-/* TOPO */
+
+/* =========================
+   TOPO
+========================= */
 
 .topo {
-    background: #183d24;
+    background: #174d2a;
     color: white;
-    padding: 25px;
     text-align: center;
+    padding: 30px 20px;
 }
 
 .topo h1 {
-    font-size: 32px;
+    font-size: 36px;
+    margin-bottom: 8px;
 }
 
 .topo p {
-    margin-top: 5px;
+    font-size: 17px;
 }
 
-/* MENU */
+
+/* =========================
+   MENU
+========================= */
 
 .menu {
-    background: #245b35;
-    padding: 10px;
+    background: #216b38;
+    padding: 12px;
+
     display: flex;
+    justify-content: center;
+    align-items: center;
+
     gap: 8px;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .menu button {
-    background: white;
-    color: #245b35;
     border: none;
-    padding: 10px 15px;
+    background: white;
+    color: #174d2a;
+
+    padding: 11px 15px;
+
     border-radius: 8px;
-    cursor: pointer;
+
+    font-size: 14px;
     font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
 }
 
 .menu button:hover {
-    background: #dcefe0;
+    transform: translateY(-2px);
+    background: #e3f2e6;
 }
 
-/* ABAS */
+.menu button.ativo {
+    background: #b9e5c3;
+}
+
+
+/* =========================
+   CONTEÚDO
+========================= */
 
 main {
+    width: 100%;
     max-width: 1100px;
+
     margin: auto;
-    padding: 25px;
+
+    padding: 30px 20px;
 }
+
+
+/* =========================
+   ABAS
+========================= */
 
 .aba {
     display: none;
@@ -67,165 +99,327 @@ main {
 
 .aba.ativa {
     display: block;
+
+    animation: aparecer 0.3s ease;
 }
 
+
+@keyframes aparecer {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================
+   TÍTULOS
+========================= */
+
 h2 {
+    font-size: 30px;
     margin-bottom: 10px;
 }
 
-p {
-    line-height: 1.6;
+h3 {
+    margin-bottom: 10px;
 }
 
-/* CARDS */
+.cabecalho-aba {
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   CARDS
+========================= */
 
 .cards {
+
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
     gap: 20px;
-    margin: 25px 0;
+
+    margin-top: 25px;
 }
 
 .card {
+
     background: white;
+
+    border-radius: 14px;
+
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,0.08);
+
+    text-align: center;
+}
+
+.card span {
+    font-size: 35px;
 }
 
 .card strong {
+
     display: block;
-    font-size: 25px;
+
     margin-top: 10px;
+
+    font-size: 26px;
 }
 
 .verde {
     color: #198754;
 }
 
-/* INFORMAÇÃO */
+
+/* =========================
+   INFORMAÇÃO
+========================= */
 
 .informacao {
+
     background: white;
+
     padding: 25px;
-    border-radius: 12px;
-    margin-top: 20px;
+
+    margin-top: 25px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,0.07);
 }
 
-/* PEÇAS */
+.informacao p {
+    margin-top: 12px;
+}
+
+
+/* =========================
+   PEÇAS
+========================= */
 
 .peca {
+
     background: white;
-    padding: 20px;
+
     margin-top: 20px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,0.07);
 }
 
 .peca h3 {
-    margin-bottom: 15px;
+    font-size: 21px;
+}
+
+
+/* =========================
+   FORMULÁRIOS
+========================= */
+
+.formulario {
+
+    background: white;
+
+    padding: 25px;
+
+    margin-top: 20px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,0.07);
 }
 
 label {
+
     display: block;
+
     margin-top: 15px;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
+
     font-weight: bold;
 }
 
 input,
 select {
+
     width: 100%;
-    padding: 12px;
-    border: 1px solid #bbb;
-    border-radius: 7px;
+
+    padding: 13px;
+
+    border: 1px solid #b8c4ba;
+
+    border-radius: 8px;
+
     font-size: 16px;
+
+    background: white;
 }
 
-button {
-    margin-top: 15px;
+input:focus,
+select:focus {
+
+    outline: 2px solid #63ad76;
+
+    border-color: #216b38;
 }
 
-/* BOTÕES */
+
+/* =========================
+   BOTÕES
+========================= */
 
 .peca button,
 .formulario button {
-    background: #198754;
-    color: white;
+
     border: none;
-    padding: 12px 20px;
+
+    background: #198754;
+
+    color: white;
+
+    padding: 13px 20px;
+
     border-radius: 8px;
+
     cursor: pointer;
+
     font-weight: bold;
+
+    font-size: 15px;
+
+    margin-top: 18px;
 }
 
 .peca button:hover,
 .formulario button:hover {
+
     background: #126b41;
 }
 
+
+/* =========================
+   BOTÃO IA
+========================= */
+
 .botaoIA {
+
     width: 100%;
-    font-size: 18px;
-    margin-top: 25px;
+
+    font-size: 18px !important;
+
+    padding: 16px !important;
+
+    background: #174d2a !important;
 }
 
-/* RESULTADOS */
+
+/* =========================
+   RESULTADO
+========================= */
 
 .resultado {
-    margin-top: 15px;
-    padding: 15px;
-    border-radius: 8px;
-    background: #eef5ef;
-    line-height: 1.6;
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    border-radius: 10px;
+
+    background: #edf6ef;
+
+    line-height: 1.7;
+
+    min-height: 20px;
 }
 
-.grande {
+.resultado.grande {
+
+    font-size: 17px;
+
     margin-top: 25px;
-    font-size: 18px;
 }
 
-/* FORMULÁRIO */
 
-.formulario {
-    background: white;
-    padding: 25px;
-    margin-top: 20px;
-    border-radius: 12px;
-}
-
-/* HISTÓRICO */
+/* =========================
+   HISTÓRICO
+========================= */
 
 .historico-item {
+
     background: white;
-    padding: 15px;
-    margin-top: 10px;
+
+    margin-top: 12px;
+
+    padding: 18px;
+
     border-left: 5px solid #198754;
+
     border-radius: 8px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.06);
 }
 
-/* RODAPÉ */
+
+/* =========================
+   RODAPÉ
+========================= */
 
 footer {
+
     margin-top: 40px;
-    padding: 25px;
-    background: #183d24;
-    color: white;
+
+    padding: 30px 20px;
+
     text-align: center;
+
+    background: #174d2a;
+
+    color: white;
 }
 
 footer small {
+
     display: block;
+
     margin-top: 8px;
+
     opacity: 0.8;
 }
 
-/* CELULAR */
 
-@media (max-width: 600px) {
+/* =========================
+   CELULAR
+========================= */
+
+@media (max-width: 650px) {
 
     .topo h1 {
-        font-size: 25px;
+        font-size: 28px;
+    }
+
+    .menu {
+        flex-direction: column;
     }
 
     .menu button {
@@ -233,9 +427,11 @@ footer small {
     }
 
     main {
-        padding: 15px;
+        padding: 20px 12px;
+    }
+
+    h2 {
+        font-size: 25px;
     }
 
 }
-```
-
