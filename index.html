@@ -1,490 +1,2175 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Trator IA - Manutenção Inteligente</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+    <title>Trator IA - Manutenção Preditiva</title>
+
+
+    <style>
+
+        /* =====================================================
+           CONFIGURAÇÕES GERAIS
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #eef3ef;
+
+            color: #18251c;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =====================================================
+           CABEÇALHO
+        ===================================================== */
+
+        header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #123d20,
+                    #24723c
+                );
+
+            color: white;
+
+            padding: 35px 20px;
+
+            text-align: center;
+
+        }
+
+
+        header h1 {
+
+            font-size: 38px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        header p {
+
+            font-size: 17px;
+
+            opacity: 0.9;
+
+        }
+
+
+        /* =====================================================
+           CONTAINER
+        ===================================================== */
+
+        .container {
+
+            max-width: 1150px;
+
+            margin: auto;
+
+            padding: 25px 18px 50px;
+
+        }
+
+
+        /* =====================================================
+           TÍTULOS
+        ===================================================== */
+
+        .titulo {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .titulo h2 {
+
+            font-size: 29px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .titulo p {
+
+            color: #56645a;
+
+        }
+
+
+        /* =====================================================
+           PAINEL DE DADOS
+        ===================================================== */
+
+        .painel {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 18px rgba(0,0,0,0.08);
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .painel h2 {
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 18px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border-radius: 8px;
+
+            border: 1px solid #b9c5bc;
+
+            background: white;
+
+            font-size: 16px;
+
+        }
+
+
+        input:focus,
+        select:focus {
+
+            outline: 2px solid #62a970;
+
+            border-color: #24723c;
+
+        }
+
+
+        /* =====================================================
+           BOTÕES
+        ===================================================== */
+
+        button {
+
+            border: none;
+
+            cursor: pointer;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+
+        }
+
+
+        button:hover {
+
+            transform: translateY(-1px);
+
+        }
+
+
+        .botao-principal {
+
+            width: 100%;
+
+            margin-top: 22px;
+
+            padding: 16px;
+
+            background: #17652f;
+
+            color: white;
+
+            font-size: 18px;
+
+        }
+
+
+        .botao-principal:hover {
+
+            background: #104d23;
+
+        }
+
+
+        .botao-peca {
+
+            background: #24723c;
+
+            color: white;
+
+            padding: 11px 17px;
+
+            margin-top: 15px;
+
+        }
+
+
+        .botao-limpar {
+
+            background: #e5eae6;
+
+            color: #26352b;
+
+            padding: 11px 17px;
+
+            margin-top: 15px;
+
+        }
+
+
+        /* =====================================================
+           RESULTADO GERAL
+        ===================================================== */
+
+        .resultado-geral {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            margin-bottom: 30px;
+
+            box-shadow:
+                0 4px 18px rgba(0,0,0,0.08);
+
+        }
+
+
+        .resultado-geral h2 {
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .resultado-vazio {
+
+            color: #69766c;
+
+            padding: 10px 0;
+
+        }
+
+
+        .nivel {
+
+            padding: 18px;
+
+            border-radius: 10px;
+
+            margin-top: 15px;
+
+            font-size: 18px;
+
+        }
+
+
+        .nivel.verde {
+
+            background: #e2f3e6;
+
+            border-left: 6px solid #198754;
+
+        }
+
+
+        .nivel.amarelo {
+
+            background: #fff4d5;
+
+            border-left: 6px solid #d99a00;
+
+        }
+
+
+        .nivel.vermelho {
+
+            background: #fde5e5;
+
+            border-left: 6px solid #c93636;
+
+        }
+
+
+        .lista-alertas {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(230px, 1fr)
+                );
+
+            gap: 14px;
+
+            margin-top: 20px;
+
+        }
+
+
+        .alerta {
+
+            padding: 16px;
+
+            border-radius: 10px;
+
+            background: #f5f7f5;
+
+            border: 1px solid #dce3dd;
+
+        }
+
+
+        .alerta strong {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        /* =====================================================
+           PEÇAS
+        ===================================================== */
+
+        .titulo-secao {
+
+            margin-top: 35px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .pecas-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(300px, 1fr)
+                );
+
+            gap: 20px;
+
+        }
+
+
+        .peca {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.07);
+
+        }
+
+
+        .icone {
+
+            font-size: 35px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .peca h3 {
+
+            font-size: 21px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .descricao {
+
+            color: #617065;
+
+            font-size: 14px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        /* =====================================================
+           RESULTADOS DAS PEÇAS
+        ===================================================== */
+
+        .resultado-peca {
+
+            margin-top: 15px;
+
+            padding: 15px;
+
+            border-radius: 9px;
+
+            background: #f0f5f1;
+
+            min-height: 20px;
+
+        }
+
+
+        .resultado-peca:empty {
+
+            display: none;
+
+        }
+
+
+        /* =====================================================
+           HISTÓRICO
+        ===================================================== */
+
+        .historico {
+
+            margin-top: 35px;
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 18px rgba(0,0,0,0.08);
+
+        }
+
+
+        .historico-item {
+
+            padding: 15px;
+
+            margin-top: 10px;
+
+            border-left: 5px solid #24723c;
+
+            background: #f4f7f4;
+
+            border-radius: 7px;
+
+        }
+
+
+        /* =====================================================
+           RODAPÉ
+        ===================================================== */
+
+        footer {
+
+            background: #123d20;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 30px 20px;
+
+        }
+
+
+        footer small {
+
+            display: block;
+
+            opacity: 0.75;
+
+            margin-top: 7px;
+
+        }
+
+
+        /* =====================================================
+           CELULAR
+        ===================================================== */
+
+        @media (max-width: 650px) {
+
+            header h1 {
+
+                font-size: 29px;
+
+            }
+
+
+            .container {
+
+                padding:
+                    18px 12px 40px;
+
+            }
+
+
+            .pecas-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .painel,
+            .peca,
+            .resultado-geral,
+            .historico {
+
+                padding: 18px;
+
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<header class="topo">
+
+<!-- =========================================================
+     CABEÇALHO
+========================================================= -->
+
+<header>
+
     <h1>🚜 Trator IA</h1>
-    <p>Manutenção preditiva inteligente</p>
+
+    <p>
+        Sistema experimental de manutenção preditiva
+    </p>
+
 </header>
 
 
-<!-- MENU -->
-<nav class="menu">
-
-    <button class="botao-aba" data-aba="inicio">🏠 Início</button>
-
-    <button class="botao-aba" data-aba="filtros">🌬️ Filtros</button>
-
-    <button class="botao-aba" data-aba="correias">🔧 Correias</button>
-
-    <button class="botao-aba" data-aba="fluidos">🛢️ Fluidos</button>
-
-    <button class="botao-aba" data-aba="injecao">💉 Injeção</button>
-
-    <button class="botao-aba" data-aba="mangueiras">🔩 Mangueiras</button>
-
-    <button class="botao-aba" data-aba="freios">⚙️ Freios</button>
-
-    <button class="botao-aba" data-aba="previsao">🤖 Previsão IA</button>
-
-    <button class="botao-aba" data-aba="historico">📊 Histórico</button>
-
-</nav>
+<div class="container">
 
 
-<main>
+    <!-- =====================================================
+         DADOS DO TRATOR
+    ====================================================== -->
 
-    <!-- INÍCIO -->
-    <section id="inicio" class="aba ativa">
+    <section class="painel">
 
-        <div class="cabecalho-aba">
-            <h2>🚜 Painel do Trator</h2>
-            <p>
-                Sistema experimental para previsão de manutenção
-                de componentes agrícolas.
-            </p>
-        </div>
+        <div class="titulo">
 
-        <div class="cards">
-
-            <div class="card">
-                <span>⏱️</span>
-                <h3>Horas do trator</h3>
-                <strong id="horasPainel">0 h</strong>
-            </div>
-
-            <div class="card">
-                <span>🔧</span>
-                <h3>Componentes</h3>
-                <strong>6</strong>
-            </div>
-
-            <div class="card">
-                <span>🤖</span>
-                <h3>Sistema</h3>
-                <strong class="verde">ATIVO</strong>
-            </div>
-
-        </div>
-
-
-        <div class="informacao">
-
-            <h3>💡 Como funciona?</h3>
+            <h2>📋 Dados do Trator</h2>
 
             <p>
-                O sistema utiliza dados como horas de funcionamento,
-                intensidade do trabalho e condições do ambiente
-                para estimar o desgaste dos componentes.
-            </p>
-
-            <p>
-                A proposta é ajudar o operador a identificar
-                quais peças podem precisar de inspeção ou manutenção.
+                Informe as condições atuais de utilização.
             </p>
 
         </div>
 
-    </section>
+
+        <div class="form-grid">
 
 
-    <!-- FILTROS -->
-    <section id="filtros" class="aba">
+            <div>
 
-        <h2>🌬️ Filtros</h2>
+                <label for="horasTrator">
+                    ⏱️ Horas totais de uso
+                </label>
 
-        <p>
-            Os filtros de ar, óleo e combustível ajudam a impedir
-            que impurezas cheguem aos componentes do motor.
-        </p>
+                <input
+                    type="number"
+                    id="horasTrator"
+                    min="0"
+                    value="1000"
+                    placeholder="Ex: 2500"
+                >
+
+            </div>
 
 
-        <div class="peca">
+            <div>
 
-            <h3>🌬️ Filtro de Ar</h3>
+                <label for="intensidade">
+                    ⚙️ Intensidade do trabalho
+                </label>
 
-            <label>Horas desde a última troca</label>
+                <select id="intensidade">
 
-            <input type="number" id="filtroAr" min="0" value="0">
+                    <option value="1">
+                        Leve
+                    </option>
 
-            <button class="botao-analisar"
-                    data-input="filtroAr"
-                    data-limite="500"
-                    data-resultado="resultadoFiltroAr">
+                    <option value="1.2">
+                        Moderada
+                    </option>
 
-                🤖 Analisar
+                    <option value="1.5">
+                        Pesada
+                    </option>
 
-            </button>
+                </select>
 
-            <div id="resultadoFiltroAr" class="resultado"></div>
+            </div>
+
+
+            <div>
+
+                <label for="ambiente">
+                    🌾 Ambiente de trabalho
+                </label>
+
+                <select id="ambiente">
+
+                    <option value="1">
+                        Normal
+                    </option>
+
+                    <option value="1.2">
+                        Poeira
+                    </option>
+
+                    <option value="1.4">
+                        Muita poeira / barro
+                    </option>
+
+                </select>
+
+            </div>
+
 
         </div>
 
 
-        <div class="peca">
+        <button
+            class="botao-principal"
+            id="analisarTrator"
+        >
 
-            <h3>🛢️ Filtro de Óleo</h3>
+            🤖 ANALISAR TRATOR
 
-            <label>Horas desde a última troca</label>
-
-            <input type="number" id="filtroOleo" min="0" value="0">
-
-            <button class="botao-analisar"
-                    data-input="filtroOleo"
-                    data-limite="250"
-                    data-resultado="resultadoFiltroOleo">
-
-                🤖 Analisar
-
-            </button>
-
-            <div id="resultadoFiltroOleo" class="resultado"></div>
-
-        </div>
-
-
-        <div class="peca">
-
-            <h3>⛽ Filtro de Combustível</h3>
-
-            <label>Horas desde a última troca</label>
-
-            <input type="number" id="filtroCombustivel" min="0" value="0">
-
-            <button class="botao-analisar"
-                    data-input="filtroCombustivel"
-                    data-limite="500"
-                    data-resultado="resultadoFiltroCombustivel">
-
-                🤖 Analisar
-
-            </button>
-
-            <div id="resultadoFiltroCombustivel" class="resultado"></div>
-
-        </div>
-
-    </section>
-
-
-    <!-- CORREIAS -->
-    <section id="correias" class="aba">
-
-        <h2>🔧 Correias</h2>
-
-        <p>
-            As correias transmitem movimento para diversos
-            componentes auxiliares do trator.
-        </p>
-
-        <div class="peca">
-
-            <h3>🔧 Correias</h3>
-
-            <label>Horas desde a última troca</label>
-
-            <input type="number" id="correiasHoras" min="0" value="0">
-
-            <button class="botao-analisar"
-                    data-input="correiasHoras"
-                    data-limite="1000"
-                    data-resultado="resultadoCorreias">
-
-                🤖 Analisar
-
-            </button>
-
-            <div id="resultadoCorreias" class="resultado"></div>
-
-        </div>
+        </button>
 
     </section>
 
 
-    <!-- FLUIDOS -->
-    <section id="fluidos" class="aba">
 
-        <h2>🛢️ Fluidos e Lubrificantes</h2>
+    <!-- =====================================================
+         RESULTADO DA IA
+    ====================================================== -->
 
-        <p>
-            Óleo do motor, óleo hidráulico e líquido de
-            arrefecimento precisam ser monitorados.
-        </p>
+    <section class="resultado-geral">
 
-        <div class="peca">
+        <h2>🤖 Resultado da análise</h2>
 
-            <h3>🛢️ Fluidos</h3>
 
-            <label>Horas desde a última troca</label>
+        <div
+            id="resultadoGeral"
+            class="resultado-vazio"
+        >
 
-            <input type="number" id="fluidosHoras" min="0" value="0">
-
-            <button class="botao-analisar"
-                    data-input="fluidosHoras"
-                    data-limite="500"
-                    data-resultado="resultadoFluidos">
-
-                🤖 Analisar
-
-            </button>
-
-            <div id="resultadoFluidos" class="resultado"></div>
+            Informe os dados do trator e clique
+            em "Analisar Trator".
 
         </div>
+
+
+        <div
+            id="alertas"
+            class="lista-alertas"
+        ></div>
 
     </section>
 
 
-    <!-- INJEÇÃO -->
-    <section id="injecao" class="aba">
 
-        <h2>💉 Bicos e Elementos de Injeção</h2>
+    <!-- =====================================================
+         FILTROS
+    ====================================================== -->
 
-        <p>
-            O sistema de injeção influencia o funcionamento,
-            potência e consumo do motor.
-        </p>
-
-        <div class="peca">
-
-            <h3>💉 Bicos de Injeção</h3>
-
-            <label>Horas desde a última verificação</label>
-
-            <input type="number" id="injecaoHoras" min="0" value="0">
-
-            <button class="botao-analisar"
-                    data-input="injecaoHoras"
-                    data-limite="2000"
-                    data-resultado="resultadoInjecao">
-
-                🤖 Analisar
-
-            </button>
-
-            <div id="resultadoInjecao" class="resultado"></div>
-
-        </div>
-
-    </section>
+    <h2 class="titulo-secao">
+        🌬️ Filtros
+    </h2>
 
 
-    <!-- MANGUEIRAS -->
-    <section id="mangueiras" class="aba">
+    <div class="pecas-grid">
 
-        <h2>🔩 Mangueiras e Vedações</h2>
 
-        <p>
-            Mangueiras, retentores e anéis podem sofrer
-            desgaste devido ao calor, pressão e uso.
-        </p>
+        <!-- FILTRO AR -->
 
-        <div class="peca">
+        <article class="peca">
 
-            <h3>🔩 Mangueiras e Vedações</h3>
+            <div class="icone">🌬️</div>
 
-            <label>Horas desde a última verificação</label>
+            <h3>Filtro de Ar</h3>
 
-            <input type="number" id="mangueirasHoras" min="0" value="0">
+            <p class="descricao">
 
-            <button class="botao-analisar"
-                    data-input="mangueirasHoras"
-                    data-limite="1500"
-                    data-resultado="resultadoMangueiras">
+                Retém partículas e impurezas
+                que poderiam chegar ao motor.
 
-                🤖 Analisar
+            </p>
+
+
+            <label for="filtroAr">
+
+                Horas desde a última troca
+
+            </label>
+
+            <input
+                type="number"
+                id="filtroAr"
+                min="0"
+                value="0"
+            >
+
+
+            <button
+                class="botao-peca"
+                onclick="analisarPeca(
+                    'filtroAr',
+                    500,
+                    'resultadoFiltroAr',
+                    'Filtro de Ar'
+                )"
+            >
+
+                🔎 Analisar
 
             </button>
 
-            <div id="resultadoMangueiras" class="resultado"></div>
 
-        </div>
+            <div
+                id="resultadoFiltroAr"
+                class="resultado-peca"
+            ></div>
 
-    </section>
-
-
-    <!-- FREIOS -->
-    <section id="freios" class="aba">
-
-        <h2>⚙️ Freios e Embreagem</h2>
-
-        <p>
-            Discos de freio e embreagem sofrem desgaste
-            de acordo com a intensidade da operação.
-        </p>
-
-        <div class="peca">
-
-            <h3>⚙️ Freios e Embreagem</h3>
-
-            <label>Horas desde a última verificação</label>
-
-            <input type="number" id="freiosHoras" min="0" value="0">
-
-            <button class="botao-analisar"
-                    data-input="freiosHoras"
-                    data-limite="3000"
-                    data-resultado="resultadoFreios">
-
-                🤖 Analisar
-
-            </button>
-
-            <div id="resultadoFreios" class="resultado"></div>
-
-        </div>
-
-    </section>
+        </article>
 
 
-    <!-- PREVISÃO IA -->
-    <section id="previsao" class="aba">
 
-        <h2>🤖 Previsão Inteligente</h2>
+        <!-- FILTRO ÓLEO -->
 
-        <p>
-            Informe as condições de utilização do trator.
-        </p>
+        <article class="peca">
 
+            <div class="icone">🛢️</div>
 
-        <div class="formulario">
+            <h3>Filtro de Óleo</h3>
 
-            <label>Horas totais de uso</label>
+            <p class="descricao">
 
-            <input type="number"
-                   id="horasTrator"
-                   min="0"
-                   value="1000">
+                Ajuda a impedir que impurezas
+                circulem no sistema de lubrificação.
+
+            </p>
 
 
-            <label>Intensidade do trabalho</label>
+            <label for="filtroOleo">
 
-            <select id="intensidade">
+                Horas desde a última troca
 
-                <option value="1">
-                    Leve
-                </option>
+            </label>
 
-                <option value="1.2">
-                    Moderada
-                </option>
-
-                <option value="1.5">
-                    Pesada
-                </option>
-
-            </select>
+            <input
+                type="number"
+                id="filtroOleo"
+                min="0"
+                value="0"
+            >
 
 
-            <label>Condição do ambiente</label>
+            <button
+                class="botao-peca"
+                onclick="analisarPeca(
+                    'filtroOleo',
+                    250,
+                    'resultadoFiltroOleo',
+                    'Filtro de Óleo'
+                )"
+            >
 
-            <select id="ambiente">
-
-                <option value="1">
-                    Normal
-                </option>
-
-                <option value="1.2">
-                    Poeira
-                </option>
-
-                <option value="1.4">
-                    Muita poeira / barro
-                </option>
-
-            </select>
-
-
-            <button id="botaoPrevisao" class="botaoIA">
-
-                🤖 Fazer previsão
+                🔎 Analisar
 
             </button>
 
-        </div>
+
+            <div
+                id="resultadoFiltroOleo"
+                class="resultado-peca"
+            ></div>
+
+        </article>
 
 
-        <div id="resultadoIA" class="resultado grande"></div>
 
-    </section>
+        <!-- FILTRO COMBUSTÍVEL -->
+
+        <article class="peca">
+
+            <div class="icone">⛽</div>
+
+            <h3>Filtro de Combustível</h3>
+
+            <p class="descricao">
+
+                Retém contaminantes presentes
+                no combustível.
+
+            </p>
 
 
-    <!-- HISTÓRICO -->
-    <section id="historico" class="aba">
+            <label for="filtroCombustivel">
+
+                Horas desde a última troca
+
+            </label>
+
+            <input
+                type="number"
+                id="filtroCombustivel"
+                min="0"
+                value="0"
+            >
+
+
+            <button
+                class="botao-peca"
+                onclick="analisarPeca(
+                    'filtroCombustivel',
+                    500,
+                    'resultadoFiltroCombustivel',
+                    'Filtro de Combustível'
+                )"
+            >
+
+                🔎 Analisar
+
+            </button>
+
+
+            <div
+                id="resultadoFiltroCombustivel"
+                class="resultado-peca"
+            ></div>
+
+        </article>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CORREIAS
+    ====================================================== -->
+
+    <h2 class="titulo-secao">
+        🔧 Correias
+    </h2>
+
+
+    <div class="pecas-grid">
+
+
+        <article class="peca">
+
+            <div class="icone">🔧</div>
+
+            <h3>Correias</h3>
+
+            <p class="descricao">
+
+                Transmitem movimento e podem sofrer
+                desgaste, perda de tensão e ressecamento.
+
+            </p>
+
+
+            <label for="correias">
+
+                Horas desde a última troca
+
+            </label>
+
+            <input
+                type="number"
+                id="correias"
+                min="0"
+                value="0"
+            >
+
+
+            <button
+                class="botao-peca"
+                onclick="analisarPeca(
+                    'correias',
+                    1000,
+                    'resultadoCorreias',
+                    'Correias'
+                )"
+            >
+
+                🔎 Analisar
+
+            </button>
+
+
+            <div
+                id="resultadoCorreias"
+                class="resultado-peca"
+            ></div>
+
+        </article>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FLUIDOS
+    ====================================================== -->
+
+    <h2 class="titulo-secao">
+        🛢️ Fluidos e Lubrificantes
+    </h2>
+
+
+    <div class="pecas-grid">
+
+
+        <article class="peca">
+
+            <div class="icone">🛢️</div>
+
+            <h3>Fluidos e Lubrificantes</h3>
+
+            <p class="descricao">
+
+                Óleo do motor, óleo hidráulico e
+                líquido de arrefecimento precisam
+                ser monitorados.
+
+            </p>
+
+
+            <label for="fluidos">
+
+                Horas desde a última troca
+
+            </label>
+
+            <input
+                type="number"
+                id="fluidos"
+                min="0"
+                value="0"
+            >
+
+
+            <button
+                class="botao-peca"
+                onclick="analisarPeca(
+                    'fluidos',
+                    500,
+                    'resultadoFluidos',
+                    'Fluidos e Lubrificantes'
+                )"
+            >
+
+                🔎 Analisar
+
+            </button>
+
+
+            <div
+                id="resultadoFluidos"
+                class="resultado-peca"
+            ></div>
+
+        </article>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INJEÇÃO
+    ====================================================== -->
+
+    <h2 class="titulo-secao">
+        💉 Bicos e Elementos de Injeção
+    </h2>
+
+
+    <div class="pecas-grid">
+
+
+        <article class="peca">
+
+            <div class="icone">💉</div>
+
+            <h3>Bicos de Injeção</h3>
+
+            <p class="descricao">
+
+                O desgaste pode afetar a potência,
+                funcionamento e consumo do motor.
+
+            </p>
+
+
+            <label for="injecao">
+
+                Horas desde a última verificação
+
+            </label>
+
+            <input
+                type="number"
+                id="injecao"
+                min="0"
+                value="0"
+            >
+
+
+            <button
+                class="botao-peca"
+                onclick="analisarPeca(
+                    'injecao',
+                    2000,
+                    'resultadoInjecao',
+                    'Bicos de Injeção'
+                )"
+            >
+
+                🔎 Analisar
+
+            </button>
+
+
+            <div
+                id="resultadoInjecao"
+                class="resultado-peca"
+            ></div>
+
+        </article>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MANGUEIRAS
+    ====================================================== -->
+
+    <h2 class="titulo-secao">
+        🔩 Mangueiras e Vedações
+    </h2>
+
+
+    <div class="pecas-grid">
+
+
+        <article class="peca">
+
+            <div class="icone">🔩</div>
+
+            <h3>Mangueiras e Vedações</h3>
+
+            <p class="descricao">
+
+                O calor e a pressão podem causar
+                ressecamento e vazamentos.
+
+            </p>
+
+
+            <label for="mangueiras">
+
+                Horas desde a última verificação
+
+            </label>
+
+            <input
+                type="number"
+                id="mangueiras"
+                min="0"
+                value="0"
+            >
+
+
+            <button
+                class="botao-peca"
+                onclick="analisarPeca(
+                    'mangueiras',
+                    1500,
+                    'resultadoMangueiras',
+                    'Mangueiras e Vedações'
+                )"
+            >
+
+                🔎 Analisar
+
+            </button>
+
+
+            <div
+                id="resultadoMangueiras"
+                class="resultado-peca"
+            ></div>
+
+        </article>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FREIOS
+    ====================================================== -->
+
+    <h2 class="titulo-secao">
+        ⚙️ Freios e Embreagem
+    </h2>
+
+
+    <div class="pecas-grid">
+
+
+        <article class="peca">
+
+            <div class="icone">⚙️</div>
+
+            <h3>Discos de Freio e Embreagem</h3>
+
+            <p class="descricao">
+
+                Componentes submetidos a atrito
+                sofrem desgaste conforme a operação.
+
+            </p>
+
+
+            <label for="freios">
+
+                Horas desde a última verificação
+
+            </label>
+
+            <input
+                type="number"
+                id="freios"
+                min="0"
+                value="0"
+            >
+
+
+            <button
+                class="botao-peca"
+                onclick="analisarPeca(
+                    'freios',
+                    3000,
+                    'resultadoFreios',
+                    'Freios e Embreagem'
+                )"
+            >
+
+                🔎 Analisar
+
+            </button>
+
+
+            <div
+                id="resultadoFreios"
+                class="resultado-peca"
+            ></div>
+
+        </article>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HISTÓRICO
+    ====================================================== -->
+
+    <section class="historico">
 
         <h2>📊 Histórico de Manutenção</h2>
 
-        <div class="formulario">
-
-            <label>Peça</label>
-
-            <select id="pecaHistorico">
-
-                <option>Filtro de Ar</option>
-                <option>Filtro de Óleo</option>
-                <option>Filtro de Combustível</option>
-                <option>Correias</option>
-                <option>Fluidos</option>
-                <option>Bicos de Injeção</option>
-                <option>Mangueiras</option>
-                <option>Freios e Embreagem</option>
-
-            </select>
+        <p>
+            Registre quando uma peça foi substituída
+            para acompanhar o histórico do trator.
+        </p>
 
 
-            <label>Horas do trator</label>
-
-            <input type="number"
-                   id="horasHistorico"
-                   min="0">
+        <div class="form-grid"
+             style="margin-top: 20px;">
 
 
-            <button id="botaoHistorico">
+            <div>
 
-                ➕ Registrar manutenção
+                <label for="pecaHistorico">
+                    Peça
+                </label>
 
-            </button>
+                <select id="pecaHistorico">
+
+                    <option>
+                        Filtro de Ar
+                    </option>
+
+                    <option>
+                        Filtro de Óleo
+                    </option>
+
+                    <option>
+                        Filtro de Combustível
+                    </option>
+
+                    <option>
+                        Correias
+                    </option>
+
+                    <option>
+                        Fluidos e Lubrificantes
+                    </option>
+
+                    <option>
+                        Bicos de Injeção
+                    </option>
+
+                    <option>
+                        Mangueiras e Vedações
+                    </option>
+
+                    <option>
+                        Freios e Embreagem
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label for="horasHistorico">
+
+                    Horas do trator
+
+                </label>
+
+                <input
+                    type="number"
+                    id="horasHistorico"
+                    min="0"
+                    placeholder="Ex: 2500"
+                >
+
+            </div>
+
 
         </div>
 
 
-        <div id="listaHistorico"></div>
+        <button
+            class="botao-peca"
+            onclick="adicionarHistorico()"
+        >
+
+            ➕ Registrar manutenção
+
+        </button>
+
+
+        <button
+            class="botao-limpar"
+            onclick="limparHistorico()"
+        >
+
+            🗑️ Limpar histórico
+
+        </button>
+
+
+        <div id="listaHistorico">
+
+        </div>
 
     </section>
 
-</main>
 
+</div>
+
+
+
+<!-- =========================================================
+     RODAPÉ
+========================================================= -->
 
 <footer>
 
-    <p>
+    <strong>
         🚜 Trator IA
-    </p>
+    </strong>
 
     <small>
         Projeto experimental de manutenção preditiva.
     </small>
 
     <small>
-        As previsões não substituem a inspeção de um profissional
-        ou as recomendações do fabricante.
+        As estimativas não substituem as recomendações
+        do fabricante ou uma inspeção profissional.
     </small>
 
 </footer>
 
 
-<!-- IMPORTANTE: JavaScript -->
-<script src="./script.js"></script>
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+    /* =====================================================
+       CONFIGURAÇÃO DAS PEÇAS
+    ===================================================== */
+
+
+    const pecas = [
+
+        {
+            nome: "Filtro de Ar",
+            limite: 500
+        },
+
+        {
+            nome: "Filtro de Óleo",
+            limite: 250
+        },
+
+        {
+            nome: "Filtro de Combustível",
+            limite: 500
+        },
+
+        {
+            nome: "Correias",
+            limite: 1000
+        },
+
+        {
+            nome: "Fluidos e Lubrificantes",
+            limite: 500
+        },
+
+        {
+            nome: "Bicos de Injeção",
+            limite: 2000
+        },
+
+        {
+            nome: "Mangueiras e Vedações",
+            limite: 1500
+        },
+
+        {
+            nome: "Freios e Embreagem",
+            limite: 3000
+        }
+
+    ];
+
+
+
+    /* =====================================================
+       ANÁLISE INDIVIDUAL DE PEÇA
+    ===================================================== */
+
+
+    function analisarPeca(
+        idInput,
+        limite,
+        idResultado,
+        nomePeca
+    ) {
+
+
+        const input =
+            document.getElementById(idInput);
+
+
+        const resultado =
+            document.getElementById(idResultado);
+
+
+        const horas =
+            Number(input.value);
+
+
+        if (
+            isNaN(horas) ||
+            horas < 0
+        ) {
+
+            resultado.innerHTML =
+
+                "⚠️ Digite uma quantidade válida de horas.";
+
+            return;
+
+        }
+
+
+        const porcentagem =
+            horas / limite;
+
+
+        let texto;
+
+
+        if (porcentagem >= 1) {
+
+
+            const excesso =
+                Math.round(
+                    horas - limite
+                );
+
+
+            texto = `
+
+                🔴 <strong>ALTA ATENÇÃO</strong>
+
+                <br><br>
+
+                <strong>${nomePeca}</strong>
+
+                atingiu o intervalo
+                de referência utilizado
+                neste protótipo.
+
+                <br><br>
+
+                Horas informadas:
+                <strong>${horas} h</strong>
+
+                <br>
+
+                Intervalo de referência:
+                <strong>${limite} h</strong>
+
+                <br>
+
+                Ultrapassagem:
+                <strong>${excesso} h</strong>
+
+                <br><br>
+
+                ⚠️ Recomenda-se inspeção
+                e consulta ao manual do fabricante.
+
+            `;
+
+        }
+
+
+        else if (porcentagem >= 0.75) {
+
+
+            const restante =
+                Math.round(
+                    limite - horas
+                );
+
+
+            texto = `
+
+                🟡 <strong>ATENÇÃO</strong>
+
+                <br><br>
+
+                <strong>${nomePeca}</strong>
+                está se aproximando
+                do intervalo de manutenção.
+
+                <br><br>
+
+                Horas informadas:
+                <strong>${horas} h</strong>
+
+                <br>
+
+                Estimativa:
+                aproximadamente
+                <strong>${restante} h</strong>
+                até a próxima avaliação.
+
+            `;
+
+        }
+
+
+        else {
+
+
+            const restante =
+                Math.round(
+                    limite - horas
+                );
+
+
+            texto = `
+
+                🟢 <strong>RISCO BAIXO</strong>
+
+                <br><br>
+
+                <strong>${nomePeca}</strong>
+                está dentro do intervalo
+                utilizado pelo protótipo.
+
+                <br><br>
+
+                Estimativa:
+                aproximadamente
+                <strong>${restante} h</strong>
+                até a próxima avaliação.
+
+            `;
+
+        }
+
+
+        resultado.innerHTML =
+            texto;
+
+    }
+
+
+
+    /* =====================================================
+       ANÁLISE GERAL DO TRATOR
+    ===================================================== */
+
+
+    document
+        .getElementById("analisarTrator")
+        .addEventListener(
+            "click",
+            analisarTrator
+        );
+
+
+    function analisarTrator() {
+
+
+        const horas =
+            Number(
+                document
+                    .getElementById(
+                        "horasTrator"
+                    )
+                    .value
+            );
+
+
+        const intensidade =
+            Number(
+                document
+                    .getElementById(
+                        "intensidade"
+                    )
+                    .value
+            );
+
+
+        const ambiente =
+            Number(
+                document
+                    .getElementById(
+                        "ambiente"
+                    )
+                    .value
+            );
+
+
+        const resultado =
+            document.getElementById(
+                "resultadoGeral"
+            );
+
+
+        const alertas =
+            document.getElementById(
+                "alertas"
+            );
+
+
+        if (
+            isNaN(horas) ||
+            horas < 0
+        ) {
+
+            resultado.innerHTML =
+
+                "⚠️ Digite corretamente as horas do trator.";
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------
+           CÁLCULO EXPERIMENTAL
+        ----------------------------------------- */
+
+
+        const fator =
+            intensidade * ambiente;
+
+
+        const indice =
+            horas * fator;
+
+
+        let nivel;
+
+        let classe;
+
+        let mensagem;
+
+
+        if (indice < 1500) {
+
+            nivel =
+                "🟢 BAIXO";
+
+            classe =
+                "verde";
+
+            mensagem =
+                "O desgaste estimado está relativamente baixo.";
+
+        }
+
+
+        else if (indice < 3000) {
+
+            nivel =
+                "🟡 MÉDIO";
+
+            classe =
+                "amarelo";
+
+            mensagem =
+                "Alguns componentes podem estar se aproximando da manutenção.";
+
+        }
+
+
+        else {
+
+            nivel =
+                "🔴 ALTO";
+
+            classe =
+                "vermelho";
+
+            mensagem =
+                "O índice estimado está elevado. Recomenda-se realizar inspeções.";
+
+        }
+
+
+        /* -----------------------------------------
+           HORAS RESTANTES
+        ----------------------------------------- */
+
+
+        const vidaReferencia =
+            5000;
+
+
+        let horasRestantes =
+            Math.round(
+
+                (
+                    vidaReferencia -
+                    indice
+                )
+                /
+                fator
+
+            );
+
+
+        if (
+            horasRestantes < 0
+        ) {
+
+            horasRestantes = 0;
+
+        }
+
+
+        /* -----------------------------------------
+           RESULTADO
+        ----------------------------------------- */
+
+
+        resultado.innerHTML = `
+
+            <div class="nivel ${classe}">
+
+                <strong>
+                    Nível estimado:
+                    ${nivel}
+                </strong>
+
+                <br><br>
+
+                Índice de desgaste:
+                <strong>
+                    ${Math.round(indice)}
+                </strong>
+
+                <br><br>
+
+                Estimativa para nova avaliação:
+                <strong>
+                    ${horasRestantes} horas
+                </strong>
+
+                <br><br>
+
+                ${mensagem}
+
+            </div>
+
+
+            <br>
+
+
+            <small>
+
+                🧠 O cálculo atual é um
+                <strong>modelo experimental</strong>.
+                Ele não é uma IA treinada com dados reais.
+
+                <br><br>
+
+                No futuro, este sistema poderá utilizar
+                dados históricos de manutenção para
+                desenvolver um modelo de Machine Learning.
+
+            </small>
+
+        `;
+
+
+        /* -----------------------------------------
+           ALERTAS DAS PEÇAS
+        ----------------------------------------- */
+
+
+        alertas.innerHTML = "";
+
+
+        pecas.forEach(
+            function(peca) {
+
+
+                const desgaste =
+                    horas *
+                    fator;
+
+
+                const percentual =
+                    desgaste /
+                    peca.limite;
+
+
+                let status;
+
+
+                if (
+                    percentual >= 1
+                ) {
+
+                    status =
+                        "🔴 Alta atenção";
+
+                }
+
+                else if (
+                    percentual >= 0.75
+                ) {
+
+                    status =
+                        "🟡 Atenção";
+
+                }
+
+                else {
+
+                    status =
+                        "🟢 Baixo risco";
+
+                }
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                div.className =
+                    "alerta";
+
+
+                div.innerHTML = `
+
+                    <strong>
+                        ${status}
+                    </strong>
+
+                    ${peca.nome}
+
+                `;
+
+
+                alertas.appendChild(
+                    div
+                );
+
+            }
+        );
+
+
+    }
+
+
+
+    /* =====================================================
+       HISTÓRICO
+    ===================================================== */
+
+
+    let historico = [];
+
+
+    try {
+
+        historico =
+            JSON.parse(
+                localStorage.getItem(
+                    "historicoTrator"
+                )
+            ) || [];
+
+    }
+
+    catch {
+
+        historico = [];
+
+    }
+
+
+
+    function adicionarHistorico() {
+
+
+        const peca =
+            document
+                .getElementById(
+                    "pecaHistorico"
+                )
+                .value;
+
+
+        const horas =
+            Number(
+                document
+                    .getElementById(
+                        "horasHistorico"
+                    )
+                    .value
+            );
+
+
+        if (
+            isNaN(horas) ||
+            horas < 0
+        ) {
+
+            alert(
+                "Digite corretamente as horas."
+            );
+
+            return;
+
+        }
+
+
+        const registro = {
+
+            peca: peca,
+
+            horas: horas,
+
+            data:
+                new Date()
+                    .toLocaleDateString(
+                        "pt-BR"
+                    )
+
+        };
+
+
+        historico.push(
+            registro
+        );
+
+
+        localStorage.setItem(
+
+            "historicoTrator",
+
+            JSON.stringify(
+                historico
+            )
+
+        );
+
+
+        document
+            .getElementById(
+                "horasHistorico"
+            )
+            .value = "";
+
+
+        mostrarHistorico();
+
+    }
+
+
+
+    function mostrarHistorico() {
+
+
+        const lista =
+            document.getElementById(
+                "listaHistorico"
+            );
+
+
+        if (
+            historico.length === 0
+        ) {
+
+            lista.innerHTML = `
+
+                <p style="
+                    margin-top:20px;
+                    color:#68756b;
+                ">
+
+                    📋 Nenhuma manutenção
+                    registrada ainda.
+
+                </p>
+
+            `;
+
+            return;
+
+        }
+
+
+        lista.innerHTML = "";
+
+
+        historico
+            .slice()
+            .reverse()
+            .forEach(
+                function(registro) {
+
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.className =
+                        "historico-item";
+
+
+                    div.innerHTML = `
+
+                        🔧
+                        <strong>
+                            ${registro.peca}
+                        </strong>
+
+                        <br>
+
+                        🚜 Horas:
+                        ${registro.horas} h
+
+                        <br>
+
+                        📅 Data:
+                        ${registro.data}
+
+                    `;
+
+
+                    lista.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+    }
+
+
+
+    function limparHistorico() {
+
+
+        if (
+            historico.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        const confirmar =
+            confirm(
+                "Tem certeza que deseja apagar todo o histórico?"
+            );
+
+
+        if (
+            !confirmar
+        ) {
+
+            return;
+
+        }
+
+
+        historico = [];
+
+
+        localStorage.removeItem(
+            "historicoTrator"
+        );
+
+
+        mostrarHistorico();
+
+    }
+
+
+
+    /* =====================================================
+       INICIAR
+    ===================================================== */
+
+    mostrarHistorico();
+
+
+</script>
+
 
 </body>
+
 </html>
